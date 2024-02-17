@@ -12,8 +12,8 @@
 |                 | Set and change project's settings                           |
 |                 | Delete project                                              |
 |                 | Remove participant from a project                           |
-|                 | Look up user's public info and project histories            |
+|                 | Look up user's public info and projects history              |
 | Participant     | Find projects based on skills and level                     |
 |                 | Send request to join a project                              |
 |                 | Leave a project                                             |
-|                 | Look up user's public info and project histories            |
+|                 | Look up user's public info and projects history              |
