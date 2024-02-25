@@ -17,3 +17,20 @@
 |                 | Send request to join a project                              |
 |                 | Leave a project                                             |
 |                 | Look up user's public info and projects history              |
+
+## Dictionary
+| Term               | Definition                                                                                                 |
+|--------------------|------------------------------------------------------------------------------------------------------------|
+| TeamCode App      | The application that facilitates collaboration among programmers by allowing them to create and join projects.|
+| Programmer         | An individual with coding skills who uses TeamCode to collaborate on projects.                             |
+| Project            | A collaborative endeavor initiated by a user on TeamCode, aimed at achieving a specific goal.              |
+| Project Manager   | A user who creates and manages a project on TeamCode.                           |
+| Participant        | A user who joins a project created by a Project Manager to contribute.          |
+| Collaboration     | The act of working together on a project with other programmers to achieve common objectives.              |
+| Join Request      | A request sent by a Participant to join a project, subject to approval/disproval by the Project Manager.             |
+| Project Settings  | Configuration options that allow the Project Manager to customize various aspects of a project.            |
+| Public Info       | Information about a user or project that is accessible to all users on TeamCode.                           |
+| Skills            | Proficiencies and abilities possessed by a programmer, which are used to match them with suitable projects. |
+| Level             | The proficiency or experience level of a programmer, categorized as beginner, intermediate, or expert.      |
+| History           | A record of past activities, such as projects joined or created, maintained by TeamCode for each user.      |
+| Preferences       | User-defined criteria or settings that influence the matching process for finding projects.       |
