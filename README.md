@@ -37,3 +37,14 @@
 | Level             | The proficiency or experience level of a programmer, categorized as beginner, intermediate, or expert.      |
 | History           | A record of past activities, such as projects joined or created, maintained by TeamCode for each user.      |
 | Preferences       | User-defined criteria or settings that influence the matching process for finding projects.       |
+
+## Business Rules
+| Rule                              | Description                                                                                                    |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
+| Project Creation Limit            | Each user can create a limited number of projects (10) |
+| Project Joining Restrictions      | Projects may have specific criteria or restrictions for joining, such as number of participants |
+| Project Ownership Transfer        | Project Managers can transfer ownership of a project to another user, subject to platform-defined procedures.   |
+| User Conduct Policies             | Users must adhere to platform guidelines regarding appropriate conduct, including behavior and content standards. |
+| Data Backup and Recovery          | The platform must implement regular data backups and have procedures in place for data recovery in case of system failures. |
+| Legal Compliance                  | The platform must comply with relevant laws and regulations, including data protection, intellectual property, and consumer rights. |
+
