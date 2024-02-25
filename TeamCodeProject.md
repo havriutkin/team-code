@@ -18,6 +18,9 @@
 |                 | Leave a project                                             |
 |                 | Look up user's public info and projects history              |
 
+## Use Case Diagram
+![UC Diagram](https://github.com/havriutkin/team-code-api/blob/main/meta/TeamCodeUseCase.drawio.svg)
+
 ## Dictionary
 | Term               | Definition                                                                                                 |
 |--------------------|------------------------------------------------------------------------------------------------------------|
