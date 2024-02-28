@@ -22,6 +22,10 @@ public class NotificationService {
                 .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
     }
 
+    public List<Notification> getNotificationsByUserId(Long userId) {
+        return notificationRepository.findNotificationByUserId(userId);
+    }
+
     public Notification createNotification(Notification notification) {
         return notificationRepository.save(notification);
     }
