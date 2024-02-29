@@ -34,7 +34,6 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
 
-        notification.setId(notificationDetails.getId());
         notification.setMessage(notificationDetails.getMessage());
         notification.setViewed(notificationDetails.isViewed());
         notification.setCreationDate(notificationDetails.getCreationDate());
