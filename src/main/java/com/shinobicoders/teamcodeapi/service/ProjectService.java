@@ -35,10 +35,10 @@ public class ProjectService {
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
         existingProject.setStatus(project.isStatus());
-        existingProject.setParticipantNumber(project.getParticipantNumber());
-        existingProject.setMaxParticipantNumber(project.getMaxParticipantNumber());
+        existingProject.setParticipantsNumber(project.getParticipantsNumber());
+        existingProject.setMaxParticipantsNumber(project.getMaxParticipantsNumber());
         existingProject.setStartDate(project.getStartDate());
-        existingProject.setGithubRepository(project.getGithubRepository());
+        existingProject.setGitRepository(project.getGitRepository());
         existingProject.setProjectLevel(project.getProjectLevel());
 
         return projectRepository.save(existingProject);

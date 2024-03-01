@@ -1,9 +1,7 @@
 package com.shinobicoders.teamcodeapi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,15 +18,18 @@ public class Project {
 
     private boolean status;
 
-    private int participantNumber;
+    private int participantsNumber;
 
-    private int maxParticipantNumber;
+    private int maxParticipantsNumber;
 
     private Date startDate;
 
-    private String githubRepository;
+    private String gitRepository;
 
     private ProjectLevel projectLevel;
+
+    @OneToMany(mappedBy = "project")
+    private List<Request> requests;
 
     public Long getId() {
         return id;
@@ -62,20 +63,20 @@ public class Project {
         this.status = status;
     }
 
-    public int getParticipantNumber() {
-        return participantNumber;
+    public int getParticipantsNumber() {
+        return participantsNumber;
     }
 
-    public void setParticipantNumber(int participantNumber) {
-        this.participantNumber = participantNumber;
+    public void setParticipantsNumber(int participantsNumber) {
+        this.participantsNumber = participantsNumber;
     }
 
-    public int getMaxParticipantNumber() {
-        return maxParticipantNumber;
+    public int getMaxParticipantsNumber() {
+        return maxParticipantsNumber;
     }
 
-    public void setMaxParticipantNumber(int maxParticipantNumber) {
-        this.maxParticipantNumber = maxParticipantNumber;
+    public void setMaxParticipantsNumber(int maxParticipantsNumber) {
+        this.maxParticipantsNumber = maxParticipantsNumber;
     }
 
     public Date getStartDate() {
@@ -86,12 +87,12 @@ public class Project {
         this.startDate = startDate;
     }
 
-    public String getGithubRepository() {
-        return githubRepository;
+    public String getGitRepository() {
+        return gitRepository;
     }
 
-    public void setGithubRepository(String githubRepository) {
-        this.githubRepository = githubRepository;
+    public void setGitRepository(String gitRepository) {
+        this.gitRepository = gitRepository;
     }
 
     public ProjectLevel getProjectLevel() {
@@ -102,14 +103,21 @@ public class Project {
         this.projectLevel = projectLevel;
     }
 
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequest(List<Request> requests) {
+        this.requests = requests;
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o) return true;
         if(o == null || o.getClass() != this.getClass()) return  false;
 
         Project project = (Project) o;
-        return Objects.equals(this.id, project.getId()) && this.status == project.isStatus() &&
-                this.githubRepository.equals(project.getGithubRepository());
+        return Objects.equals(this.id, project.getId());
 
     }
 
@@ -125,11 +133,12 @@ public class Project {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
-                ", participantNumber=" + participantNumber +
-                ", maxParticipantNumber=" + maxParticipantNumber +
+                ", participantNumber=" + participantsNumber +
+                ", maxParticipantNumber=" + maxParticipantsNumber +
                 ", startDate=" + startDate +
-                ", gitRepository='" + githubRepository + '\'' +
+                ", gitRepository='" + gitRepository + '\'' +
                 ", projectLevel=" + projectLevel +
+                ", requests =" + requests +
                 '}';
     }
 }
