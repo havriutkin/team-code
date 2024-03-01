@@ -84,11 +84,8 @@ public class Request {
         if(o == null || o.getClass() != this.getClass()) return  false;
 
         Request request = (Request) o;
-        return Objects.equals(this.id, request.getId()) && this.status == request.getStatus()
-                && this.getRequestDate().equals(request.getRequestDate())
-                && this.getUser().equals(request.getUser())
-                && this.getProject().equals(request.getProject())
-                && this.hashCode() == request.hashCode();
+        return this.getUser().equals(request.getUser())
+                && this.getProject().equals(request.getProject());
     }
 
     @Override

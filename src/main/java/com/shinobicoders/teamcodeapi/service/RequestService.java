@@ -25,8 +25,7 @@ public class RequestService {
 
     public Request createRequest(Request request){
         List<Request> requests = getAllRequests();
-        Optional<Request> existingRequest = requests.stream().filter(i -> i.getProject().equals(request.getProject())
-                && i.getUser().equals(request.getUser())).findFirst();
+        Optional<Request> existingRequest = requests.stream().filter(i -> i.equals(request)).findFirst();
 
         if(existingRequest.isPresent()) {
             // Duplicate request found, return null to indicate no creation
