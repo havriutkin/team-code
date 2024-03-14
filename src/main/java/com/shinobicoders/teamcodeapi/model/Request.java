@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueUserAndProject",
+        columnNames = { "user", "project" }) })
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,8 +86,7 @@ public class Request {
         if(o == null || o.getClass() != this.getClass()) return  false;
 
         Request request = (Request) o;
-        return this.getUser().equals(request.getUser())
-                && this.getProject().equals(request.getProject());
+        return Objects.equals(this.id, request.getId());
     }
 
     @Override

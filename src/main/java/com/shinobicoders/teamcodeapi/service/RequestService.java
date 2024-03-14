@@ -36,9 +36,10 @@ public class RequestService {
         }
     }
 
-    public Request updateRequestMessage(Long id, String newMessage){
+    public Request updateRequest(Long id, Request updatedRequest){
         Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
-        request.setMessage(newMessage);
+        request.setStatus(updatedRequest.getStatus());
+        request.setMessage(updatedRequest.getMessage());
         return request;
     }
 
