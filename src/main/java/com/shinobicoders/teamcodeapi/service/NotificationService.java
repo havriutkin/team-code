@@ -4,7 +4,7 @@ import com.shinobicoders.teamcodeapi.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shinobicoders.teamcodeapi.model.Notification
+import com.shinobicoders.teamcodeapi.model.Notification;
 
 import java.util.List;
 

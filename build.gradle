@@ -23,7 +23,11 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    implementation 'com.auth0:java-jwt:4.4.0'
     implementation 'javax.validation:validation-api:2.0.1.Final'
+
+    // Spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
