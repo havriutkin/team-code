@@ -1,11 +1,10 @@
 -- Participants Table
 CREATE TABLE Participant (
-    participant_id SERIAL PRIMARY KEY,
-    user_id INT,
-    project_id INT,
-    FOREIGN KEY (user_id) REFERENCES "user"(user_id),
-    FOREIGN KEY (project_id) REFERENCES Project(project_id)
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES "user"(id),
+    project_id INT REFERENCES Project(id)
 );
+
 
 INSERT INTO Participant (user_id, project_id) VALUES
     (4, 4), -- User 4 participating in Project 4 (FinPlanner)

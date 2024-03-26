@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1/request")
 public class RequestController {
 
     @Autowired
@@ -24,11 +25,11 @@ public class RequestController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Request> updateRequestMessage(@PathVariable Long id, @RequestBody String newMessage){
-        return new ResponseEntity<>(requestService.updateRequestMessage(id, newMessage), HttpStatus.OK);
+    public ResponseEntity<Request> updateRequestMessage(@PathVariable Long id, @RequestBody Request request){
+        return new ResponseEntity<>(requestService.updateRequest(id, request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRequest(@PathVariable Long id){
         requestService.deleteRequest(id);
         return new ResponseEntity<>(HttpStatus.OK);

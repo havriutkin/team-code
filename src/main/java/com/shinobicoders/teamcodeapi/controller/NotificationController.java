@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/notification")
+@RequestMapping("/api/v1/notification")
 public class NotificationController {
     @Autowired
     NotificationService notificationService;

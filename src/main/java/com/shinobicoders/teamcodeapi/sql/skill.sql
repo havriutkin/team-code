@@ -1,40 +1,90 @@
 -- Skill Table
 CREATE TABLE Skill (
-    skill_id SERIAL PRIMARY KEY,
-    skill_name VARCHAR(250) NOT NULL
+    id SERIAL PRIMARY KEY,
+    skill_name VARCHAR(250) NOT NULL UNIQUE
 );
-
-ALTER TABLE Skill ADD CONSTRAINT skill_name_unique UNIQUE (skill_name);
 
 -- Project Skill Table
 CREATE TABLE Project_Skill (
     project_skill_id SERIAL PRIMARY KEY,
-    fk_project INT,
-    fk_skill INT,
-    FOREIGN KEY (fk_project) REFERENCES Project(project_id),
-    FOREIGN KEY (fk_skill) REFERENCES Skill(skill_id)
+    fk_project INT REFERENCES Project(id),
+    fk_skill INT REFERENCES Skill(id)
 );
 
 ALTER TABLE Project_Skill ADD CONSTRAINT fk_project_fk_skill_unique UNIQUE (fk_project, fk_skill);
-ALTER TABLE Project_Skill ADD CONSTRAINT fk_project_fk_skill_cascade FOREIGN KEY (fk_project) REFERENCES Project(project_id) ON DELETE CASCADE;
-ALTER TABLE Project_Skill ADD CONSTRAINT fk_skill_fk_project_cascade FOREIGN KEY (fk_skill) REFERENCES Skill(skill_id) ON DELETE CASCADE;
+ALTER TABLE Project_Skill ADD CONSTRAINT fk_project_fk_skill_cascade FOREIGN KEY (fk_project) REFERENCES Project(id) ON DELETE CASCADE;
+ALTER TABLE Project_Skill ADD CONSTRAINT fk_skill_fk_project_cascade FOREIGN KEY (fk_skill) REFERENCES Skill(id) ON DELETE CASCADE;
 
 
 
 -- User Skill Table
 CREATE TABLE User_Skill (
-    user_skill_id SERIAL PRIMARY KEY,
-    fk_user INT,
-    fk_skill INT,
-    FOREIGN KEY (fk_user) REFERENCES "user"(user_id),
-    FOREIGN KEY (fk_skill) REFERENCES Skill(skill_id)
+    id SERIAL PRIMARY KEY,
+    fk_user INT REFERENCES "user"(id),
+    fk_skill INT REFERENCES Skill(id)
 );
 
-ALTER TABLE User_Skill ADD CONSTRAINT fk_user_fk_skill_cascade FOREIGN KEY (fk_user) REFERENCES "user"(user_id) ON DELETE CASCADE;
-ALTER TABLE User_Skill ADD CONSTRAINT fk_skill_fk_user_cascade FOREIGN KEY (fk_skill) REFERENCES Skill(skill_id) ON DELETE CASCADE;
+ALTER TABLE User_Skill ADD CONSTRAINT fk_user_fk_skill_cascade FOREIGN KEY (fk_user) REFERENCES "user"(id) ON DELETE CASCADE;
+ALTER TABLE User_Skill ADD CONSTRAINT fk_skill_fk_user_cascade FOREIGN KEY (fk_skill) REFERENCES Skill(id) ON DELETE CASCADE;
 
 
 ALTER TABLE User_Skill ADD CONSTRAINT fk_user_fk_skill_unique UNIQUE (fk_user, fk_skill);
+
+INSERT INTO Skill (skill_name) VALUES
+    ('JavaScript'),
+    ('Python'),
+    ('Java'),
+    ('C#'),
+    ('PHP'),
+    ('Ruby'),
+    ('Swift'),
+    ('Kotlin'),
+    ('Go'),
+    ('Rust'),
+    ('TypeScript'),
+    ('SQL'),
+    ('NoSQL'),
+    ('HTML'),
+    ('CSS'),
+    ('React'),
+    ('Angular'),
+    ('Vue.js'),
+    ('Node.js'),
+    ('Django'),
+    ('Flask'),
+    ('Spring Boot'),
+    ('ASP.NET'),
+    ('Ruby on Rails'),
+    ('Laravel'),
+    ('Kubernetes'),
+    ('Docker'),
+    ('AWS'),
+    ('Azure'),
+    ('Google Cloud Platform'),
+    ('Git'),
+    ('Machine Learning'),
+    ('Deep Learning'),
+    ('Data Analysis'),
+    ('Data Visualization'),
+    ('Blockchain'),
+    ('Cybersecurity'),
+    ('IoT (Internet of Things)'),
+    ('Mobile Development'),
+    ('Web Development'),
+    ('Agile Methodologies'),
+    ('Scrum'),
+    ('DevOps'),
+    ('UI/UX Design'),
+    ('Graphic Design'),
+    ('SEO Optimization'),
+    ('Project Management'),
+    ('Digital Marketing');
+
+INSERT INTO skill (skill_name) VALUES
+    ('Salesforce');
+
+INSERT INTO skill (skill_name) VALUES
+    ('SAP');
 
 -- Project 1
 INSERT INTO Project_Skill (fk_project, fk_skill) VALUES
@@ -109,67 +159,6 @@ INSERT INTO Project_Skill (fk_project, fk_skill) VALUES
     (10, 42),
     (10, 43),
     (10, 44);
-
-
-
-INSERT INTO Skill (skill_name) VALUES
-    ('JavaScript'),
-    ('Python'),
-    ('Java'),
-    ('C#'),
-    ('PHP'),
-    ('Ruby'),
-    ('Swift'),
-    ('Kotlin'),
-    ('Go'),
-    ('Rust'),
-    ('TypeScript'),
-    ('SQL'),
-    ('NoSQL'),
-    ('HTML'),
-    ('CSS'),
-    ('React'),
-    ('Angular'),
-    ('Vue.js'),
-    ('Node.js'),
-    ('Django'),
-    ('Flask'),
-    ('Spring Boot'),
-    ('ASP.NET'),
-    ('Ruby on Rails'),
-    ('Laravel'),
-    ('Kubernetes'),
-    ('Docker'),
-    ('AWS'),
-    ('Azure'),
-    ('Google Cloud Platform'),
-    ('Git'),
-    ('Machine Learning'),
-    ('Deep Learning'),
-    ('Data Analysis'),
-    ('Data Visualization'),
-    ('Blockchain'),
-    ('Cybersecurity'),
-    ('IoT (Internet of Things)'),
-    ('Mobile Development'),
-    ('Web Development'),
-    ('Agile Methodologies'),
-    ('Scrum'),
-    ('DevOps'),
-    ('UI/UX Design'),
-    ('Graphic Design'),
-    ('SEO Optimization'),
-    ('Project Management'),
-    ('Digital Marketing');
-
-INSERT INTO skill (skill_name) VALUES
-    ('Salesforce');
-
-INSERT INTO skill (skill_name) VALUES
-    ('SAP');
-
-
-
 
 
 -- User 1

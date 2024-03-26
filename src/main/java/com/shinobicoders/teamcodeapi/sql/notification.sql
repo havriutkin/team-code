@@ -1,12 +1,12 @@
 -- Notification Table
 CREATE TABLE Notification (
-    notification_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     message TEXT NOT NULL,
     is_viewed BOOLEAN DEFAULT FALSE,
     creation_date DATE,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES "user"(user_id) ON DELETE CASCADE
+    user_id INT REFERENCES "user"(id) ON DELETE CASCADE
 );
+
 
 INSERT INTO Notification (message, is_viewed, creation_date, user_id) VALUES
     ('Your request to join Project EcoFinder has been approved. Welcome to the team!', FALSE, '2024-03-02', 10),
