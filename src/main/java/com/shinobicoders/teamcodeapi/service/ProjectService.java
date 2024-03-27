@@ -1,11 +1,16 @@
 package com.shinobicoders.teamcodeapi.service;
 
 import com.shinobicoders.teamcodeapi.model.Project;
+import com.shinobicoders.teamcodeapi.model.ProjectLevel;
 import com.shinobicoders.teamcodeapi.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -19,10 +24,6 @@ public class ProjectService {
 
     public Project getProjectById(Long id){
         return projectRepository.findById(id).orElse(null);
-    }
-
-    public Project getProjectByName(String name){
-        return projectRepository.findProjectByName(name).orElseThrow(() -> new EntityNotFoundException("Project with project name [" + name + "] not found"));
     }
 
     public Project createProject(Project project){
@@ -42,6 +43,22 @@ public class ProjectService {
         existingProject.setProjectLevel(project.getProjectLevel());
 
         return projectRepository.save(existingProject);
+    }
+
+    public List<Project> FilterProjects (String projectName, ProjectLevel projectLevel, List<Long> skills){
+        List<Project> filteredProjects = new ArrayList<>();
+        
+        if (projectName != null)
+            filteredProjects.addAll(projectRepository.findAllByNameContainingIgnoreCase(projectName));
+
+        if (projectLevel != null)
+            filteredProjects.retainAll(projectRepository.findAllByProjectLevel(projectLevel));
+
+        if (skills != null && !skills.isEmpty()) {
+            filteredProjects.retainAll(projectRepository.findAllProjectsWithSkills(skills));
+        }
+
+        return  filteredProjects;
     }
 
     public void deleteProject(Long id){

@@ -27,6 +27,11 @@ public class RequestController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request){
+        return  new ResponseEntity<>(requestService.updateRequest(id, request), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRequest(@PathVariable Long id){
         requestService.deleteRequest(id);
