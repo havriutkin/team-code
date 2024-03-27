@@ -1,13 +1,17 @@
 package com.shinobicoders.teamcodeapi.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Objects;
 
+@Setter
+@Getter
 @Entity
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueUserAndProject",
-        columnNames = { "user", "project" }) })
+        columnNames = { "user_id", "project_id" }) })
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,60 +24,12 @@ public class Request {
     private String message;
 
     @ManyToOne
-    @JoinColumn(name = "request_user", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "request_project", referencedColumnName = "project_id")
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public RequestStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(RequestStatus status) {
-        this.status = status;
-    }
-
-    public Date getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
 
     @Override
     public int hashCode() {

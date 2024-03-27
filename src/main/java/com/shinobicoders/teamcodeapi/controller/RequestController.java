@@ -2,16 +2,17 @@ package com.shinobicoders.teamcodeapi.controller;
 
 import com.shinobicoders.teamcodeapi.model.Request;
 import com.shinobicoders.teamcodeapi.service.RequestService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/v1/request")
+@RequiredArgsConstructor
 public class RequestController {
-
-    @Autowired
-    private RequestService requestService;
+    private final RequestService requestService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Request> getRequest(@PathVariable Long id){
@@ -24,11 +25,11 @@ public class RequestController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Request> updateRequestMessage(@PathVariable Long id, @RequestBody String newMessage){
-        return new ResponseEntity<>(requestService.updateRequestMessage(id, newMessage), HttpStatus.OK);
+    public ResponseEntity<Request> updateRequestMessage(@PathVariable Long id, @RequestBody Request request){
+        return new ResponseEntity<>(requestService.updateRequest(id, request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRequest(@PathVariable Long id){
         requestService.deleteRequest(id);
         return new ResponseEntity<>(HttpStatus.OK);

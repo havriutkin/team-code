@@ -18,10 +18,10 @@ public class ProjectService {
     }
 
     public Project getProjectById(Long id){
-        return projectRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Project with ID [" + id + "] not found"));
+        return projectRepository.findById(id).orElse(null);
     }
 
-    public  Project getProjectByName(String name){
+    public Project getProjectByName(String name){
         return projectRepository.findProjectByName(name).orElseThrow(() -> new EntityNotFoundException("Project with project name [" + name + "] not found"));
     }
 

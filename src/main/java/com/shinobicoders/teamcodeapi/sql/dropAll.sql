@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS "experience",
+"notification",
+"participant",
+"project",
+"project_level",
+"project_skill",
+"request",
+"request_status",
+"skill",
+"user",
+"user_skill" CASCADE;

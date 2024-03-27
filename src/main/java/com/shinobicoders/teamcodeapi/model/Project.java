@@ -1,17 +1,25 @@
 package com.shinobicoders.teamcodeapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.shinobicoders.teamcodeapi.model.Request;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "project_name")
     private String name;
 
     private String description;
@@ -26,90 +34,17 @@ public class Project {
 
     private String gitRepository;
 
+    @Column(name = "project_level_id")
     private ProjectLevel projectLevel;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Request> requests;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getParticipantsNumber() {
-        return participantsNumber;
-    }
-
-    public void setParticipantsNumber(int participantsNumber) {
-        this.participantsNumber = participantsNumber;
-    }
-
-    public int getMaxParticipantsNumber() {
-        return maxParticipantsNumber;
-    }
-
-    public void setMaxParticipantsNumber(int maxParticipantsNumber) {
-        this.maxParticipantsNumber = maxParticipantsNumber;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getGitRepository() {
-        return gitRepository;
-    }
-
-    public void setGitRepository(String gitRepository) {
-        this.gitRepository = gitRepository;
-    }
-
-    public ProjectLevel getProjectLevel() {
-        return projectLevel;
-    }
-
-    public void setProjectLevel(ProjectLevel projectLevel) {
-        this.projectLevel = projectLevel;
-    }
-
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequest(List<Request> requests) {
-        this.requests = requests;
-    }
 
     @Override
     public boolean equals(Object o){
