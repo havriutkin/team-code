@@ -28,6 +28,14 @@ public class User {
     @Column(name = "experience_id")
     private Experience experience;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_skill",
+            joinColumns = @JoinColumn(name = "fk_user"),
+            inverseJoinColumns = @JoinColumn(name = "fk_skill")
+    )
+    private List<Skill> skills;
+
     @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private List<Project> ownedProjects;

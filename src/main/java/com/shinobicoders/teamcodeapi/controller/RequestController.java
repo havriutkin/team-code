@@ -19,15 +19,13 @@ public class RequestController {
         return new ResponseEntity<>(requestService.getRequestById(id), HttpStatus.OK);
     }
 
+    // todo: get by project id
+
     @PostMapping
     public ResponseEntity<Request> createRequest(@RequestBody Request request){
         return new ResponseEntity<>(requestService.createRequest(request), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Request> updateRequestMessage(@PathVariable Long id, @RequestBody Request request){
-        return new ResponseEntity<>(requestService.updateRequest(id, request), HttpStatus.OK);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRequest(@PathVariable Long id){
