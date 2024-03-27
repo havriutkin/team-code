@@ -23,7 +23,6 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable Long id){
-        System.out.println("HELLO BLYAT!!!!!");
         return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
     }
 

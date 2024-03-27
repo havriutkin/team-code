@@ -1,11 +1,10 @@
 package com.shinobicoders.teamcodeapi.controller;
 
-import com.shinobicoders.teamcodeapi.model.LoginRequest;
-import com.shinobicoders.teamcodeapi.model.LoginResponse;
+import com.shinobicoders.teamcodeapi.auth.LoginRequest;
+import com.shinobicoders.teamcodeapi.auth.LoginResponse;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

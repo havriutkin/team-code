@@ -1,4 +1,4 @@
-package com.shinobicoders.teamcodeapi.model;
+package com.shinobicoders.teamcodeapi.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

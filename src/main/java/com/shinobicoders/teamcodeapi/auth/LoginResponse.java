@@ -1,4 +1,4 @@
-package com.shinobicoders.teamcodeapi.model;
+package com.shinobicoders.teamcodeapi.auth;
 
 import lombok.Builder;
 import lombok.Getter;

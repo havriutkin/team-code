@@ -1,7 +1,8 @@
-package com.shinobicoders.teamcodeapi.service;
+package com.shinobicoders.teamcodeapi.auth;
 
 import com.shinobicoders.teamcodeapi.model.User;
-import com.shinobicoders.teamcodeapi.model.UserPrincipal;
+import com.shinobicoders.teamcodeapi.auth.UserPrincipal;
+import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

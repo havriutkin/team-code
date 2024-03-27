@@ -1,5 +1,6 @@
 package com.shinobicoders.teamcodeapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.shinobicoders.teamcodeapi.model.Request;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class Project {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Request> requests;
 

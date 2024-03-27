@@ -1,5 +1,6 @@
 package com.shinobicoders.teamcodeapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,13 +18,17 @@ public class User {
 
     private String name;
     private String email;
+
+    @JsonIgnore
     private String password;
+
     private String bio;
     private String githubLink;
 
     @Column(name = "experience_id")
     private Experience experience;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private List<Project> ownedProjects;
 
