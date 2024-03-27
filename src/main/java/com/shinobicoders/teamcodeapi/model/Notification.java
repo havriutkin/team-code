@@ -1,11 +1,15 @@
 package com.shinobicoders.teamcodeapi.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,44 +23,12 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public boolean isViewed() {
         return isViewed;
     }
 
     public void setViewed(boolean viewed) {
         isViewed = viewed;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override

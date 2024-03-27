@@ -32,6 +32,14 @@ public class User {
     @OneToMany(mappedBy = "owner")
     private List<Project> ownedProjects;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Request> requests;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
