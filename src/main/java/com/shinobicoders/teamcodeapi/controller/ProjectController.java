@@ -26,6 +26,8 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
     }
 
+    // todo: get project by name, get project by filter
+
     /*
     @GetMapping("/{name}")
     public ResponseEntity<Project> getProjectByName(@PathVariable String name){
