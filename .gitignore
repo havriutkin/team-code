@@ -37,6 +37,5 @@ out/
 .vscode/
 
 ### Security ###
-application.yaml
-application.yml
-application.properties
+/application.yaml
+/src/main/resources/application.properties
