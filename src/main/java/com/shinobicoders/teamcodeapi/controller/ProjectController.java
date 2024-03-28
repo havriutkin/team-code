@@ -1,6 +1,7 @@
 package com.shinobicoders.teamcodeapi.controller;
 
 import com.shinobicoders.teamcodeapi.model.Project;
+import com.shinobicoders.teamcodeapi.model.ProjectFilter;
 import com.shinobicoders.teamcodeapi.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,14 +27,10 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
     }
 
-    // todo: get project by name, get project by filter
-
-
-    /*
-    @GetMapping("/{name}")
-    public ResponseEntity<Project> getProjectByName(@PathVariable String name){
-        return new ResponseEntity<>(projectService.getProjectByName(name), HttpStatus.OK);
-    }*/
+    @GetMapping("/filter")
+    public ResponseEntity<List<Project>> getProjectsByFilter(@RequestBody ProjectFilter projectFilter){
+        return new ResponseEntity<>(projectService.getProjectsByFilter(projectFilter), HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<Project> createProject(Project project){

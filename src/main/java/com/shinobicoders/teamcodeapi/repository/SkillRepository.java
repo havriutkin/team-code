@@ -1,5 +1,4 @@
 package com.shinobicoders.teamcodeapi.repository;
-
 import com.shinobicoders.teamcodeapi.model.Skill;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
