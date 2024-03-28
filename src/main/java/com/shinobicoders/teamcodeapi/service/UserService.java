@@ -3,9 +3,7 @@ package com.shinobicoders.teamcodeapi.service;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +18,14 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public User getUserById(long id) {
+    public User getUserById(long id) throws NotFoundException {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(NotFoundException::new);
     }
 
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws NotFoundException{
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(NotFoundException::new);
     }
 
     public User createUser(User user) {
