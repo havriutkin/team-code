@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Security ###
+application.yaml
+application.yml
+application.properties
