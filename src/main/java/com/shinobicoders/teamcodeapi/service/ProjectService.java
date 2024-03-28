@@ -1,17 +1,25 @@
 package com.shinobicoders.teamcodeapi.service;
 
 import com.shinobicoders.teamcodeapi.model.Project;
+import com.shinobicoders.teamcodeapi.model.ProjectFilter;
+import com.shinobicoders.teamcodeapi.model.ProjectLevel;
+import com.shinobicoders.teamcodeapi.model.Skill;
 import com.shinobicoders.teamcodeapi.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
+@RequiredArgsConstructor
 public class ProjectService {
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     public List<Project> getAllProjects(){
         return projectRepository.findAll();
@@ -19,10 +27,6 @@ public class ProjectService {
 
     public Project getProjectById(Long id){
         return projectRepository.findById(id).orElse(null);
-    }
-
-    public Project getProjectByName(String name){
-        return projectRepository.findProjectByName(name).orElseThrow(() -> new EntityNotFoundException("Project with project name [" + name + "] not found"));
     }
 
     public Project createProject(Project project){
@@ -42,6 +46,30 @@ public class ProjectService {
         existingProject.setProjectLevel(project.getProjectLevel());
 
         return projectRepository.save(existingProject);
+    }
+
+    public List<Project> getProjectsByFilter (ProjectFilter projectFilter){
+        String projectName = projectFilter.getName();
+        ProjectLevel projectLevel = projectFilter.getProjectLevel();
+        List<String> skillNames = projectFilter.getSkills() == null ?
+                new ArrayList<>() :
+                projectFilter.getSkills();
+
+        List<Project> filteredProjects = new ArrayList<>(projectRepository.findAll());
+
+        if (projectName != null) {
+            filteredProjects.retainAll(projectRepository.findAllByNameContainingIgnoreCase(projectName));
+        }
+
+        if (projectLevel != null) {
+            filteredProjects.retainAll(projectRepository.findAllByProjectLevel(projectLevel));
+        }
+
+        if (!skillNames.isEmpty()) {
+            filteredProjects.retainAll(projectRepository.findAllProjectsBySkills(skillNames, skillNames.size()));
+        }
+
+        return filteredProjects;
     }
 
     public void deleteProject(Long id){

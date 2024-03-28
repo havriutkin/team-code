@@ -39,7 +39,6 @@ public class RequestService {
     public Request updateRequest(Long id, Request updatedRequest){
         Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
         request.setStatus(updatedRequest.getStatus());
-        request.setMessage(updatedRequest.getMessage());
         return request;
     }
 
