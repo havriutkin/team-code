@@ -42,6 +42,9 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.updateProject(id, updatedProject), HttpStatus.OK);
     }
 
+    // TODO: Implement auth when delteing a project,
+    //  @PreAuthorize("@projectService.isOwner(authentication.principal.username, #id)")
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id){
         projectService.deleteProject(id);
