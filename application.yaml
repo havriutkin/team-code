@@ -1,4 +1,0 @@
-auth:
-  jwt:
-    ttl: 86400
-    secret: "eaa0a0e59da62d4199563aedda3bf961646d03b2c36f37f70e9b1a2f7f98b475"
