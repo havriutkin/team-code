@@ -1,13 +1,11 @@
 package com.shinobicoders.teamcodeapi.service;
 
-import com.shinobicoders.teamcodeapi.model.Project;
-import com.shinobicoders.teamcodeapi.model.ProjectFilter;
-import com.shinobicoders.teamcodeapi.model.ProjectLevel;
-import com.shinobicoders.teamcodeapi.model.Skill;
+import com.shinobicoders.teamcodeapi.model.*;
 import com.shinobicoders.teamcodeapi.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final UserService userService;
 
     public List<Project> getAllProjects(){
         return projectRepository.findAll();
@@ -74,5 +73,16 @@ public class ProjectService {
 
     public void deleteProject(Long id){
         projectRepository.deleteById(id);
+    }
+
+    public boolean isOwner(Long projectId, String userEmail) throws ChangeSetPersister.NotFoundException {
+        // Get user
+        User user = userService.getUserByEmail(userEmail);
+
+        // Get project
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project with ID [" + projectId + "] not found"));
+
+        return project.getOwner().equals(user);
     }
 }

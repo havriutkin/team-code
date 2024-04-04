@@ -3,6 +3,7 @@ package com.shinobicoders.teamcodeapi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import com.shinobicoders.teamcodeapi.model.Request;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,7 +53,6 @@ public class Project {
     @JsonIgnore
     @OneToMany(mappedBy = "project")
     private List<Request> requests;
-
 
     @Override
     public boolean equals(Object o){

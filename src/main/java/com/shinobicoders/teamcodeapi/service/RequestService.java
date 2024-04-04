@@ -23,6 +23,10 @@ public class RequestService {
         return requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
     }
 
+    public List<Request> getRequestByProjectId(Long projectId){
+        return requestRepository.findByProjectId(projectId).orElseThrow(() -> new EntityNotFoundException("Request with Project ID [" + projectId + "] not found"));
+    }
+
     public Request createRequest(Request request){
         List<Request> requests = getAllRequests();
         Optional<Request> existingRequest = requests.stream().filter(i -> i.equals(request)).findFirst();
