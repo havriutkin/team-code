@@ -13,5 +13,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
 }

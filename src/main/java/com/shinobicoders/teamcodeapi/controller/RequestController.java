@@ -17,12 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Date;
 import java.util.List;
 
-/*
-* TODO:
-*  - Authorize user before Get?
-*  - Add try-catch block to handle exceptions, and return appropriate response
-* */
-
 @RestController
 @RequestMapping("/api/v1/request")
 @RequiredArgsConstructor
