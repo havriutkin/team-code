@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) throws ChangeSetPersister.NotFoundException {
         User updatedUser = userService.updateUser(id, userDetails);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }

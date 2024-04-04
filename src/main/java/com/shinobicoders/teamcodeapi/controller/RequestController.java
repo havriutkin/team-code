@@ -4,6 +4,7 @@ import com.shinobicoders.teamcodeapi.model.Request;
 import com.shinobicoders.teamcodeapi.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Request> getRequest(@PathVariable Long id){
+    public ResponseEntity<Request> getRequest(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
         return new ResponseEntity<>(requestService.getRequestById(id), HttpStatus.OK);
     }
 
@@ -28,7 +29,7 @@ public class RequestController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request){
+    public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request) throws ChangeSetPersister.NotFoundException {
         return  new ResponseEntity<>(requestService.updateRequest(id, request), HttpStatus.OK);
     }
 

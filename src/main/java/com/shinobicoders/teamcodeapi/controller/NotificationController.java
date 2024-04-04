@@ -4,6 +4,7 @@ import com.shinobicoders.teamcodeapi.model.Notification;
 import com.shinobicoders.teamcodeapi.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) {
+    public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) throws ChangeSetPersister.NotFoundException {
         Notification notification = notificationService.updateNotification(id, updatedNotification);
         return new ResponseEntity<>(notification, HttpStatus.OK);
     }

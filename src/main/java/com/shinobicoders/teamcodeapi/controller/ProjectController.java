@@ -4,6 +4,7 @@ import com.shinobicoders.teamcodeapi.model.Project;
 import com.shinobicoders.teamcodeapi.model.ProjectFilter;
 import com.shinobicoders.teamcodeapi.service.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Long id){
+    public ResponseEntity<Project> getProjectById(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
         return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
     }
 
@@ -39,7 +40,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject){
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject) throws ChangeSetPersister.NotFoundException {
         return new ResponseEntity<>(projectService.updateProject(id, updatedProject), HttpStatus.OK);
     }
 
