@@ -1,19 +1,18 @@
 package com.shinobicoders.teamcodeapi.service;
 
+import com.shinobicoders.teamcodeapi.exception.EntityCreationException;
+import com.shinobicoders.teamcodeapi.exception.EntityDeletionException;
+import com.shinobicoders.teamcodeapi.exception.EntityUpdateException;
 import com.shinobicoders.teamcodeapi.model.Project;
 import com.shinobicoders.teamcodeapi.model.ProjectFilter;
 import com.shinobicoders.teamcodeapi.model.ProjectLevel;
-import com.shinobicoders.teamcodeapi.model.Skill;
 import com.shinobicoders.teamcodeapi.repository.ProjectRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -25,16 +24,22 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Project getProjectById(Long id){
-        return projectRepository.findById(id).orElse(null);
+    public Project getProjectById(Long id) throws NotFoundException
+    {
+        return projectRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public Project createProject(Project project){
-        return projectRepository.save(project);
+        try{
+            return projectRepository.save(project);
+        } catch (Exception e){
+            throw new EntityCreationException("Error creating project: " + e.getMessage(), e.getCause());
+        }
     }
 
-    public Project updateProject(Long id, Project project){
-        Project existingProject = projectRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Project with ID [" + id + "] not found"));
+    public Project updateProject(Long id, Project project) throws NotFoundException
+    {
+        Project existingProject = projectRepository.findById(id).orElseThrow(NotFoundException::new);
 
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
@@ -45,7 +50,11 @@ public class ProjectService {
         existingProject.setGitRepository(project.getGitRepository());
         existingProject.setProjectLevel(project.getProjectLevel());
 
-        return projectRepository.save(existingProject);
+        try {
+            return projectRepository.save(existingProject);
+        } catch (Exception e){
+            throw new EntityUpdateException("Error updating project: " + e.getMessage(), e.getCause());
+        }
     }
 
     public List<Project> getProjectsByFilter (ProjectFilter projectFilter){
@@ -72,7 +81,11 @@ public class ProjectService {
         return filteredProjects;
     }
 
-    public void deleteProject(Long id){
-        projectRepository.deleteById(id);
+    public void deleteProject(Long id) {
+        try {
+            projectRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new EntityDeletionException("Error deleting project: " + e.getMessage(), e.getCause());
+        }
     }
 }

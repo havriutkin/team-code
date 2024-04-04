@@ -1,9 +1,12 @@
 package com.shinobicoders.teamcodeapi.service;
 
+import com.shinobicoders.teamcodeapi.exception.EntityCreationException;
+import com.shinobicoders.teamcodeapi.exception.EntityDeletionException;
+import com.shinobicoders.teamcodeapi.exception.EntityUpdateException;
 import com.shinobicoders.teamcodeapi.model.Request;
 import com.shinobicoders.teamcodeapi.repository.RequestRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +22,8 @@ public class RequestService {
         return (List<Request>) requestRepository.findAll();
     }
 
-    public Request getRequestById(Long id){
-        return requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
+    public Request getRequestById(Long id) throws NotFoundException {
+        return requestRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public Request createRequest(Request request){
@@ -32,17 +35,29 @@ public class RequestService {
             return null;
         } else {
             // No duplicate found, save the new request and return it
-            return requestRepository.save(request);
+            try{
+                return requestRepository.save(request);
+            } catch (Exception e){
+                throw new EntityCreationException("Error creating request: " + e.getMessage(), e.getCause());
+            }
         }
     }
 
-    public Request updateRequest(Long id, Request updatedRequest){
-        Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
+    public Request updateRequest(Long id, Request updatedRequest) throws NotFoundException {
+        Request request = requestRepository.findById(id).orElseThrow(NotFoundException::new);
         request.setStatus(updatedRequest.getStatus());
-        return request;
+        try {
+            return request;
+        } catch (Exception e){
+            throw new EntityUpdateException("Error updating request: " + e.getMessage(), e.getCause());
+        }
     }
 
-    public void deleteRequest(Long id){
-        requestRepository.deleteById(id);
+    public void deleteRequest(Long id) {
+        try {
+            requestRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new EntityDeletionException("Error deleting request: " + e.getMessage(), e.getCause());
+        }
     }
 }
