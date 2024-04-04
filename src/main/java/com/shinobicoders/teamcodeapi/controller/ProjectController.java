@@ -40,11 +40,17 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody ProjectDetails projectDetails) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<Project> createProject(@RequestBody ProjectDetails projectDetails) {
         // Retrieve user
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUserByEmail(userDetails.getUsername());
-        List<Skill> skills = projectDetails.getSkills().stream().map(skillService::getSkillByName).toList();
+        User user = null;
+        List<Skill> skills = null;
+        try {
+            user = userService.getUserByEmail(userDetails.getUsername());
+            skills = projectDetails.getSkills().stream().map(skillService::getSkillByName).toList();
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // Build project
         Project project = new Project();
@@ -64,28 +70,36 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject) {
         // Get userEmail
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userEmail = userDetails.getUsername();
 
         // Check if user is the owner of the project
-        if(!projectService.isOwner(id, userEmail)){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        try {
+            if(!projectService.isOwner(id, userEmail)){
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(projectService.updateProject(id, updatedProject), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProject(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<?> deleteProject(@PathVariable Long id) {
         // Get userEmail
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userEmail = userDetails.getUsername();
 
         // Check if user is the owner of the project
-        if(!projectService.isOwner(id, userEmail)){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        try {
+            if(!projectService.isOwner(id, userEmail)){
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         projectService.deleteProject(id);

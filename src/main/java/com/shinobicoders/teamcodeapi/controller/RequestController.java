@@ -7,6 +7,7 @@ import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,13 +42,18 @@ public class RequestController {
     }
 
     @PostMapping
-    public ResponseEntity<Request> createRequest(@RequestBody RequestDetails requestDetails) throws ChangeSetPersister.NotFoundException {
-        // Get user
+    public ResponseEntity<Request> createRequest(@RequestBody RequestDetails requestDetails) {
+        // Get user and project
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUserByEmail(userDetails.getUsername());
+        User user = null;
+        Project project = null;
+        try {
+            user = userService.getUserByEmail(userDetails.getUsername());
+            project = projectService.getProjectById(requestDetails.getProjectId());
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-        // Get project
-        Project project = projectService.getProjectById(requestDetails.getProjectId());
 
         Request request = new Request();
         request.setMessage(requestDetails.getMessage());
@@ -61,10 +67,15 @@ public class RequestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request) {
         // Get user
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUserByEmail(userDetails.getUsername());
+        User user = null;
+        try {
+            user = userService.getUserByEmail(userDetails.getUsername());
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // Check if user is owner of request
         if(!request.getUser().getId().equals(user.getId())){
@@ -75,13 +86,19 @@ public class RequestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRequest(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
-        // Get user
+    public ResponseEntity<?> deleteRequest(@PathVariable Long id) {
+        // Get user and request
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.getUserByEmail(userDetails.getUsername());
+        User user = null;
+        Request request = null;
+        try {
+            user = userService.getUserByEmail(userDetails.getUsername());
+            request = requestService.getRequestById(id);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // Check if user is owner of request
-        Request request = requestService.getRequestById(id);
         if(!request.getUser().getId().equals(user.getId())){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

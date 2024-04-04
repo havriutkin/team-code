@@ -21,10 +21,15 @@ public class NotificationController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Notification>> getNotificationsByUserId(@PathVariable Long userId) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<List<Notification>> getNotificationsByUserId(@PathVariable Long userId) {
         // Get User
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = userService.getUserByEmail(userDetails.getUsername()).getId();
+        Long currentUserId = null;
+        try {
+            currentUserId = userService.getUserByEmail(userDetails.getUsername()).getId();
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // Check if user is authorized to view notifications
         if (!currentUserId.equals(userId)) {
@@ -36,10 +41,15 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) {
         // Get User
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = userService.getUserByEmail(userDetails.getUsername()).getId();
+        Long currentUserId = null;
+        try {
+            currentUserId = userService.getUserByEmail(userDetails.getUsername()).getId();
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // Check if user is authorized to update notification
         if (!currentUserId.equals(updatedNotification.getUser().getId())) {
@@ -51,10 +61,15 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteNotification(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<?> deleteNotification(@PathVariable Long id) {
         // Get User
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = userService.getUserByEmail(userDetails.getUsername()).getId();
+        Long currentUserId = null;
+        try {
+            currentUserId = userService.getUserByEmail(userDetails.getUsername()).getId();
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         // Check if user is authorized to delete notification
         Notification notification = notificationService.getNotificationById(id);
