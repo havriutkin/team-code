@@ -32,6 +32,7 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getProjectsByFilter(projectFilter), HttpStatus.OK);
     }
 
+    // Transient fields for skillNames, default set up owner
     @PostMapping
     public ResponseEntity<Project> createProject(Project project){
         return new ResponseEntity<>(projectService.createProject(project), HttpStatus.CREATED);

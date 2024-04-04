@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +58,7 @@ public class UserServiceTest {
     @Nested
     public class GetUserByIdTests {
         @Test
-        public void shouldReturnUserById() {
+        public void shouldReturnUserById() throws ChangeSetPersister.NotFoundException {
             User user = new User();
             user.setId(1L);
 
@@ -82,7 +83,7 @@ public class UserServiceTest {
     @Nested
     public class GetUserByEmailTests {
         @Test
-        public void shouldReturnUserByEmail() {
+        public void shouldReturnUserByEmail() throws ChangeSetPersister.NotFoundException {
             User user = new User();
             String email = "fakemail@gmail.com";
             user.setEmail(email);

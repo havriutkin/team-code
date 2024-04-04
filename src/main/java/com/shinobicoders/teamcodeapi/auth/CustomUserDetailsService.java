@@ -4,6 +4,7 @@ import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.auth.UserPrincipal;
 import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.getUserByEmail(username);
+        User user = null;
+        try {
+            user = userService.getUserByEmail(username);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         return UserPrincipal.builder()
                 .userId(user.getId())
