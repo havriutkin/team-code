@@ -70,18 +70,14 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject) {
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject) throws ChangeSetPersister.NotFoundException {
         // Get userEmail
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userEmail = userDetails.getUsername();
 
         // Check if user is the owner of the project
-        try {
-            if(!projectService.isOwner(id, userEmail)){
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-        } catch (ChangeSetPersister.NotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!projectService.isOwner(id, userEmail)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(projectService.updateProject(id, updatedProject), HttpStatus.OK);

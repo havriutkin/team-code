@@ -75,9 +75,14 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
 
-    public boolean isOwner(Long projectId, String userEmail) throws ChangeSetPersister.NotFoundException {
+    public boolean isOwner(Long projectId, String userEmail) {
         // Get user
-        User user = userService.getUserByEmail(userEmail);
+        User user = null;
+        try {
+            user = userService.getUserByEmail(userEmail);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            throw new ChangeSetPersister.NotFoundException();
+        }
 
         // Get project
         Project project = projectRepository.findById(projectId)
