@@ -19,12 +19,22 @@ public class NotificationController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<Notification>> getNotificationsByUserId(@PathVariable Long userId) {
         List<Notification> notifications = notificationService.getNotificationsByUserId(userId);
+
+        if (notifications.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(notifications, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) {
         Notification notification = notificationService.updateNotification(id, updatedNotification);
+
+        if(notification == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(notification, HttpStatus.OK);
     }
 

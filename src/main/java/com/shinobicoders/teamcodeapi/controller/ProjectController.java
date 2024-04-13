@@ -19,17 +19,33 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<Project>> getAllProjects(){
+        if (projectService.getAllProjects().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable Long id){
-        return new ResponseEntity<>(projectService.getProjectById(id), HttpStatus.OK);
+        Project project = projectService.getProjectById(id);
+
+        if (project == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
     @GetMapping("/filter")
     public ResponseEntity<List<Project>> getProjectsByFilter(@RequestBody ProjectFilter projectFilter){
-        return new ResponseEntity<>(projectService.getProjectsByFilter(projectFilter), HttpStatus.OK);
+        List<Project> projects = projectService.getProjectsByFilter(projectFilter);
+
+        if (projects.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     // Transient fields for skillNames, default set up owner
@@ -39,8 +55,14 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project updatedProject){
-        return new ResponseEntity<>(projectService.updateProject(id, updatedProject), HttpStatus.OK);
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails){
+        Project updatedProject = projectService.updateProject(id, projectDetails);
+
+        if (updatedProject == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
     }
 
     // TODO: Implement auth when delteing a project,
