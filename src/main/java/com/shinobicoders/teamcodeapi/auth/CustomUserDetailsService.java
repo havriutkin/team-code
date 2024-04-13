@@ -20,12 +20,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = null;
-        try {
-            user = userService.getUserByEmail(username);
-        } catch (ChangeSetPersister.NotFoundException e) {
-            throw new RuntimeException(e);
+    public UserDetails loadUserByUsername(String username) {
+        User user = userService.getUserByEmail(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
 
         return UserPrincipal.builder()
