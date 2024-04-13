@@ -24,18 +24,30 @@ public class SkillController {
     @GetMapping("/name")
     public ResponseEntity<Skill> getSkillByName(String name) {
         Skill skill = skillService.getSkillByName(name);
+
+        if (skill == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(skill, HttpStatus.OK);
     }
 
     @GetMapping("/user")
     public ResponseEntity<List<Skill>> getSkillsByUserId(Long userId) {
         List<Skill> skills = skillService.getSkillsByUserId(userId);
+
+        if (skills.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(skills, HttpStatus.OK);
     }
 
     @GetMapping("/project")
     public ResponseEntity<List<Skill>> getSkillsByProjectId(Long projectId) {
         List<Skill> skills = skillService.getSkillsByProjectId(projectId);
+
+        if (skills.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(skills, HttpStatus.OK);
     }
 

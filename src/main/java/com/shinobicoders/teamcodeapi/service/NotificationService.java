@@ -37,8 +37,6 @@ public class NotificationService {
 
         notification.setMessage(notificationDetails.getMessage());
         notification.setViewed(notificationDetails.isViewed());
-        notification.setCreationDate(notificationDetails.getCreationDate());
-        notification.setUser(notificationDetails.getUser());
 
         return notificationRepository.save(notification);
     }

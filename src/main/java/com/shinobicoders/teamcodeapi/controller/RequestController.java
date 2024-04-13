@@ -16,20 +16,35 @@ public class RequestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Request> getRequest(@PathVariable Long id){
-        return new ResponseEntity<>(requestService.getRequestById(id), HttpStatus.OK);
+        Request request = requestService.getRequestById(id);
+
+        if(request == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(request, HttpStatus.OK);
     }
 
     // todo: get by project id
 
     @PostMapping
     public ResponseEntity<Request> createRequest(@RequestBody Request request){
-        return new ResponseEntity<>(requestService.createRequest(request), HttpStatus.CREATED);
+        Request createdRequest = requestService.createRequest(request);
+
+        if(createdRequest == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
     }
 
 
     @PutMapping("/{id}")
     public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request){
-        return  new ResponseEntity<>(requestService.updateRequest(id, request), HttpStatus.OK);
+        Request updatedRequest = requestService.updateRequest(id, request);
+
+        if(updatedRequest == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        return  new ResponseEntity<>(updatedRequest, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
