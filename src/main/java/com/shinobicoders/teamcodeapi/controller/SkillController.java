@@ -25,8 +25,9 @@ public class SkillController {
     public ResponseEntity<Skill> getSkillByName(String name) {
         Skill skill = skillService.getSkillByName(name);
 
-        if (skill == null)
+        if (skill == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(skill, HttpStatus.OK);
     }
@@ -35,8 +36,9 @@ public class SkillController {
     public ResponseEntity<List<Skill>> getSkillsByUserId(Long userId) {
         List<Skill> skills = skillService.getSkillsByUserId(userId);
 
-        if (skills.isEmpty())
+        if (skills.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(skills, HttpStatus.OK);
     }
@@ -45,8 +47,9 @@ public class SkillController {
     public ResponseEntity<List<Skill>> getSkillsByProjectId(Long projectId) {
         List<Skill> skills = skillService.getSkillsByProjectId(projectId);
 
-        if (skills.isEmpty())
+        if (skills.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(skills, HttpStatus.OK);
     }

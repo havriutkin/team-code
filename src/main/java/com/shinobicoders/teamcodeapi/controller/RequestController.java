@@ -18,8 +18,9 @@ public class RequestController {
     public ResponseEntity<Request> getRequest(@PathVariable Long id){
         Request request = requestService.getRequestById(id);
 
-        if(request == null)
+        if(request == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         return new ResponseEntity<>(request, HttpStatus.OK);
     }
@@ -30,8 +31,9 @@ public class RequestController {
     public ResponseEntity<Request> createRequest(@RequestBody Request request){
         Request createdRequest = requestService.createRequest(request);
 
-        if(createdRequest == null)
+        if(createdRequest == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
     }
@@ -41,8 +43,9 @@ public class RequestController {
     public ResponseEntity<Request> updateRequest(@PathVariable Long id, @RequestBody Request request){
         Request updatedRequest = requestService.updateRequest(id, request);
 
-        if(updatedRequest == null)
+        if(updatedRequest == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         return  new ResponseEntity<>(updatedRequest, HttpStatus.OK);
     }
