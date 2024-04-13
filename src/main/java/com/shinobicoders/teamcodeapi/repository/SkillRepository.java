@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SkillRepository extends CrudRepository<Skill, Long>{
     @Query("SELECT s FROM Skill s JOIN s.users u WHERE u.id = :userId")
@@ -13,5 +14,5 @@ public interface SkillRepository extends CrudRepository<Skill, Long>{
     @Query("SELECT s FROM Skill s JOIN s.projects p WHERE p.id = :projectId")
     List<Skill> findSkillsByProjectId(@Param("projectId") Long projectId);
 
-    Skill findByName(String name);
+    Optional<Skill> findByName(String name);
 }

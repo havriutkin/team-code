@@ -25,7 +25,7 @@ public class SkillService {
     }
 
     public Skill getSkillByName(String name) {
-        return skillRepository.findByName(name);
+        return skillRepository.findByName(name).orElse(null);
     }
 
     // Create skill

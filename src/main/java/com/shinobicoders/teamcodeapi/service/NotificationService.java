@@ -18,8 +18,7 @@ public class NotificationService {
     }
 
     public Notification getNotificationById(Long id) {
-        return notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
+        return notificationRepository.findById(id).orElse(null);
     }
 
     public List<Notification> getNotificationsByUserId(Long userId) {
@@ -31,8 +30,10 @@ public class NotificationService {
     }
 
     public Notification updateNotification(Long id, Notification notificationDetails) {
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
+        Notification notification = notificationRepository.findById(id).orElse(null);
+
+        if (notification == null)
+            return null;
 
         notification.setMessage(notificationDetails.getMessage());
         notification.setViewed(notificationDetails.isViewed());

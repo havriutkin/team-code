@@ -20,7 +20,7 @@ public class RequestService {
     }
 
     public Request getRequestById(Long id){
-        return requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
+        return requestRepository.findById(id).orElse(null);
     }
 
     public Request createRequest(Request request){
@@ -37,8 +37,13 @@ public class RequestService {
     }
 
     public Request updateRequest(Long id, Request updatedRequest){
-        Request request = requestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Request with ID [" + id + "] not found"));
+        Request request = requestRepository.findById(id).orElse(null);
+        if (request == null)
+            return null;
+
         request.setStatus(updatedRequest.getStatus());
+        request.setMessage(updatedRequest.getMessage());
+
         return request;
     }
 
