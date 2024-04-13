@@ -24,16 +24,7 @@ public class RequestService {
     }
 
     public Request createRequest(Request request){
-        List<Request> requests = getAllRequests();
-        Optional<Request> existingRequest = requests.stream().filter(i -> i.equals(request)).findFirst();
-
-        if(existingRequest.isPresent()) {
-            // Duplicate request found, return null to indicate no creation
-            return null;
-        } else {
-            // No duplicate found, save the new request and return it
-            return requestRepository.save(request);
-        }
+        return requestRepository.save(request);
     }
 
     public Request updateRequest(Long id, Request updatedRequest){
