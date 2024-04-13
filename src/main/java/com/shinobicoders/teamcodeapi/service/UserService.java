@@ -18,28 +18,24 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public User getUserById(long id) throws NotFoundException {
-        return userRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
+    public User getUserById(long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
-    public User getUserByEmail(String email) throws NotFoundException{
-        return userRepository.findByEmail(email)
-                .orElseThrow(NotFoundException::new);
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public User createUser(User user) {
-        try {
-            return userRepository.save(user);
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating user: " + e.getMessage());
-        }
+        return userRepository.save(user);
     }
 
     public User updateUser(Long id, User userDetails) {
-        // TODO: create custom exception for ResourceNotFound
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        User user = userRepository.findById(id).orElse(null);
+
+        if (user == null) {
+            return null;
+        }
 
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
@@ -52,10 +48,6 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        try {
-            userRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting user: " + e.getMessage());
-        }
+        userRepository.deleteById(id);
     }
 }
