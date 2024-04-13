@@ -34,7 +34,11 @@ public class ProjectService {
     }
 
     public Project updateProject(Long id, Project project){
-        Project existingProject = projectRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Project with ID [" + id + "] not found"));
+        Project existingProject = projectRepository.findById(id).orElse(null);
+
+        if (existingProject == null) {
+            return null;
+        }
 
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());
