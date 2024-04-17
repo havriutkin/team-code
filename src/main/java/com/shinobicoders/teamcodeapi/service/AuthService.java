@@ -44,21 +44,26 @@ public class AuthService {
         return login(user.getEmail(), password);
     }
 
-    public boolean authorizeProjectOwner(Long userId, Long projectId) {
+    public boolean authorizeProjectOwner(Long projectId) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return projectService.getProjectById(projectId).getOwner().getId().equals(principal.getUserId());
+    }
+
+    public boolean authorizeProjectMember(Long projectId) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Project project = projectService.getProjectById(projectId);
-        return project.getOwner().getId().equals(userId);
+        return project.getOwner().getId().equals(principal.getUserId()) ||
+                project.getParticipants().stream()
+                        .anyMatch(user -> user.getId().equals(principal.getUserId()));
     }
 
-    public boolean authorizeProjectMember(Long userId, Long projectId) {
-        Project project = projectService.getProjectById(projectId);
-        return project.getParticipants().stream().anyMatch(member -> member.getId().equals(userId));
+    public boolean authorizeRequestOwner(Long requestId) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return requestService.getRequestById(requestId).getUser().getId().equals(principal.getUserId());
     }
 
-    public boolean authorizeRequestOwner(Long userId, Long requestId) {
-        return requestService.getRequestById(requestId).getUser().getId().equals(userId);
-    }
-
-    public boolean authorizeNotificationOwner(Long userId, Long notificationId) {
-        return notificationService.getNotificationById(notificationId).getUser().getId().equals(userId);
+    public boolean authorizeNotificationOwner(Long notificationId) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return notificationService.getNotificationById(notificationId).getUser().getId().equals(principal.getUserId());
     }
 }

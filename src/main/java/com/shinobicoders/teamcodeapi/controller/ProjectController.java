@@ -1,11 +1,15 @@
 package com.shinobicoders.teamcodeapi.controller;
 
+import com.shinobicoders.teamcodeapi.auth.UserPrincipal;
 import com.shinobicoders.teamcodeapi.model.Project;
 import com.shinobicoders.teamcodeapi.model.ProjectFilter;
+import com.shinobicoders.teamcodeapi.model.User;
+import com.shinobicoders.teamcodeapi.service.AuthService;
 import com.shinobicoders.teamcodeapi.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/v1/project")
 @RequiredArgsConstructor
 public class ProjectController {
-
+    private final AuthService authService;
     private final ProjectService projectService;
 
     @GetMapping
@@ -56,6 +60,12 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails){
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!authService.authorizeProjectOwner(userPrincipal.getUserId(), id)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         Project updatedProject = projectService.updateProject(id, projectDetails);
 
         if (updatedProject == null) {
@@ -65,11 +75,14 @@ public class ProjectController {
         return new ResponseEntity<>(updatedProject, HttpStatus.OK);
     }
 
-    // TODO: Implement auth when delteing a project,
-    //  @PreAuthorize("@projectService.isOwner(authentication.principal.username, #id)")
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id){
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!authService.authorizeProjectOwner(userPrincipal.getUserId(), id)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         projectService.deleteProject(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
