@@ -37,10 +37,6 @@ public class JWTUtils {
     }
 
     public UserPrincipal convertTokenToPrincipal(DecodedJWT jwt) {
-        //var rolesList = getClaimOrEmptyList(jwt, "roles").stream()
-          //      .map(SimpleGrantedAuthority::new)
-            //    .toList();
-
         return UserPrincipal.builder()
                 .userId(Long.parseLong(jwt.getSubject()))
                 .email(jwt.getClaim("email").asString())

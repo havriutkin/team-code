@@ -41,6 +41,15 @@ public class Project {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "participant",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> participants;
+
     @ManyToMany
     @JoinTable(
             name = "project_skill",
