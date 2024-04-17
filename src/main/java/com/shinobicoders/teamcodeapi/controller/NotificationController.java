@@ -1,6 +1,7 @@
 package com.shinobicoders.teamcodeapi.controller;
 
 import com.shinobicoders.teamcodeapi.model.Notification;
+import com.shinobicoders.teamcodeapi.service.AuthService;
 import com.shinobicoders.teamcodeapi.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationController {
     private final NotificationService notificationService;
+    private final AuthService authService;
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<Notification>> getNotificationsByUserId(@PathVariable Long userId) {
@@ -29,6 +31,11 @@ public class NotificationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) {
+
+        if(! authService.authorizeNotificationOwner(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         Notification notification = notificationService.updateNotification(id, updatedNotification);
 
         if(notification == null) {
@@ -40,6 +47,11 @@ public class NotificationController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteNotification(@PathVariable Long id) {
+
+        if(! authService.authorizeNotificationOwner(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         notificationService.deleteNotification(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
