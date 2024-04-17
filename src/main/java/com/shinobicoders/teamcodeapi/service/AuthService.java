@@ -3,6 +3,7 @@ package com.shinobicoders.teamcodeapi.service;
 import com.shinobicoders.teamcodeapi.auth.JWTUtils;
 import com.shinobicoders.teamcodeapi.auth.LoginResponse;
 import com.shinobicoders.teamcodeapi.model.Project;
+import com.shinobicoders.teamcodeapi.model.Request;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.auth.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -57,9 +58,19 @@ public class AuthService {
                         .anyMatch(user -> user.getId().equals(principal.getUserId()));
     }
 
-    public boolean authorizeRequestOwner(Long requestId) {
+    public boolean authorizeRequestUser(Long requestId) {
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return requestService.getRequestById(requestId).getUser().getId().equals(principal.getUserId());
+
+        Request request = requestService.getRequestById(requestId);
+        Project project = request.getProject();
+
+        // Check if the user is the owner of the request
+        if (request.getUser().getId().equals(principal.getUserId())) {
+            return true;
+        }
+
+        // Check if the user is the owner of the project
+        return project.getOwner().getId().equals(principal.getUserId());
     }
 
     public boolean authorizeNotificationOwner(Long notificationId) {
