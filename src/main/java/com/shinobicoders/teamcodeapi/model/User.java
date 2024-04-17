@@ -23,6 +23,7 @@ public class User {
     private String password;
 
     private String bio;
+
     private String githubLink;
 
     @Column(name = "experience_id")
