@@ -60,12 +60,6 @@ public class ProjectController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails){
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (!authService.authorizeProjectOwner(userPrincipal.getUserId(), id)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         Project updatedProject = projectService.updateProject(id, projectDetails);
 
         if (updatedProject == null) {
@@ -77,12 +71,6 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id){
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (!authService.authorizeProjectOwner(userPrincipal.getUserId(), id)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         projectService.deleteProject(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
