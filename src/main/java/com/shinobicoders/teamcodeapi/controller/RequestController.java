@@ -45,7 +45,9 @@ public class RequestController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getRequestsByUserId(@PathVariable Long userId){
-        // todo: add authService.authorizeUser
+        if (!authService.authorizeUser(userId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         return new ResponseEntity<>(requestService.getRequestsByUserId(userId), HttpStatus.OK);
     }
