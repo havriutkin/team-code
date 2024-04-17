@@ -66,4 +66,9 @@ public class AuthService {
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return notificationService.getNotificationById(notificationId).getUser().getId().equals(principal.getUserId());
     }
+
+    public boolean authorizeUser(Long userId) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getUserId().equals(userId);
+    }
 }
