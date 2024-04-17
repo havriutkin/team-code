@@ -23,6 +23,14 @@ public class RequestService {
         return requestRepository.findById(id).orElse(null);
     }
 
+    public List<Request> getRequestsByUserId(Long userId){
+        return requestRepository.findAllByUserId(userId);
+    }
+
+    public List<Request> getRequestsByProjectId(Long projectId){
+        return requestRepository.findAllByProjectId(projectId);
+    }
+
     public Request createRequest(Request request){
         return requestRepository.save(request);
     }
