@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.shinobicoders.teamcodeapi.model.Notification;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +27,10 @@ public class NotificationService {
     }
 
     public Notification createNotification(Notification notification) {
+
+        notification.setViewed(false);
+        notification.setCreationDate(new Date());
+
         return notificationRepository.save(notification);
     }
 
