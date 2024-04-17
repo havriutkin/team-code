@@ -48,6 +48,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "participants")
+    private List<Project> participatingProjects;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
