@@ -6,12 +6,14 @@ import com.shinobicoders.teamcodeapi.model.ProjectFilter;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.service.AuthService;
 import com.shinobicoders.teamcodeapi.service.ProjectService;
+import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,6 +22,7 @@ import java.util.List;
 public class ProjectController {
     private final AuthService authService;
     private final ProjectService projectService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Project>> getAllProjects(){
@@ -52,14 +55,57 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    // Transient fields for skillNames, default set up owner
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<Project>> getProjectsByMemberId(@PathVariable Long memberId){
+        if(!authService.authorizeProjectMember(memberId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = userService.getUserById(memberId);
+        List<Project> projects = user.getParticipatingProjects();
+
+        if (projects.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<Project>> getProjectsByOwnerId(@PathVariable Long ownerId){
+        if(!authService.authorizeProjectOwner(ownerId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = userService.getUserById(ownerId);
+        List<Project> projects = user.getOwnedProjects();
+
+        if (projects.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Project> createProject(Project project){
+        User owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        project.setStartDate(new Date());
+        project.setOwner(owner);
+        project.setParticipants(List.of(owner));
+        project.setParticipantsNumber(1);
+        project.setStatus(true);
+
         return new ResponseEntity<>(projectService.createProject(project), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails){
+        if(!authService.authorizeProjectOwner(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         Project updatedProject = projectService.updateProject(id, projectDetails);
 
         if (updatedProject == null) {
@@ -71,6 +117,10 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id){
+        if(!authService.authorizeProjectOwner(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         projectService.deleteProject(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
