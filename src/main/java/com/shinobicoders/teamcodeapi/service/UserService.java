@@ -1,5 +1,6 @@
 package com.shinobicoders.teamcodeapi.service;
 
+import com.shinobicoders.teamcodeapi.model.Skill;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final SkillService skillService;
 
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
@@ -27,6 +29,19 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User addSkill(Long userId, Long skillId) {
+        User user = userRepository.findById(userId).orElse(null);
+        Skill skill = skillService.getSkillById(skillId);
+
+        if (user == null || skill == null) {
+            return null;
+        }
+
+        user.getSkills().add(skill);
+
         return userRepository.save(user);
     }
 
@@ -58,6 +73,18 @@ public class UserService {
         }
 
         user.getParticipatingProjects().removeIf(project -> project.getId().equals(projectId));
+
+        return userRepository.save(user);
+    }
+
+    public User removeSkill(Long userId, Long skillId) {
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return null;
+        }
+
+        user.getSkills().removeIf(skill -> skill.getId().equals(skillId));
 
         return userRepository.save(user);
     }

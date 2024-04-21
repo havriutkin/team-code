@@ -16,6 +16,10 @@ public class SkillService {
         return (List<Skill>) skillRepository.findAll();
     }
 
+    public Skill getSkillById(Long id) {
+        return skillRepository.findById(id).orElse(null);
+    }
+
     public List<Skill> getSkillsByUserId(Long userId) {
         return skillRepository.findSkillsByUserId(userId);
     }
