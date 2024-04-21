@@ -1,14 +1,14 @@
 package com.shinobicoders.teamcodeapi.controller;
 
-import com.shinobicoders.teamcodeapi.model.Request;
+import com.shinobicoders.teamcodeapi.model.*;
 import com.shinobicoders.teamcodeapi.service.AuthService;
+import com.shinobicoders.teamcodeapi.service.NotificationService;
 import com.shinobicoders.teamcodeapi.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.shinobicoders.teamcodeapi.model.RequestStatus;
 
 import java.util.Date;
 
@@ -18,6 +18,7 @@ import java.util.Date;
 public class RequestController {
     private final AuthService authService;
     private final RequestService requestService;
+    private final NotificationService notificationService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Request> getRequest(@PathVariable Long id){
@@ -63,6 +64,14 @@ public class RequestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        // Create notification for project owner
+        Project project = createdRequest.getProject();
+        User owner = project.getOwner();
+        Notification notification = new Notification();
+        notification.setMessage("New request for project " + project.getName());
+        notification.setUser(owner);
+        notificationService.createNotification(notification);
+
         return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
     }
 
@@ -72,10 +81,19 @@ public class RequestController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        Request odlRequest = requestService.getRequestById(id);
         Request updatedRequest = requestService.updateRequest(id, request);
 
         if(updatedRequest == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Create notification for user who made the request if the status has changed
+        if (odlRequest.getStatus() != updatedRequest.getStatus()) {
+            Notification notification = new Notification();
+            notification.setMessage("Request for project " + updatedRequest.getProject().getName() + " has been updated");
+            notification.setUser(updatedRequest.getUser());
+            notificationService.createNotification(notification);
         }
 
         return  new ResponseEntity<>(updatedRequest, HttpStatus.OK);
