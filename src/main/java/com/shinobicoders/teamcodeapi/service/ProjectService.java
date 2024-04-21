@@ -18,6 +18,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final SkillService skillService;
+    private final UserService userService;
 
     public List<Project> getAllProjects(){
         return projectRepository.findAll();
@@ -31,6 +33,38 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public Project addSkill(Long projectId, Long skillId){
+        Project project = projectRepository.findById(projectId).orElse(null);
+        Skill skill = skillService.getSkillById(skillId);
+
+        if (project == null || skill == null) {
+            return null;
+        }
+
+        List<Skill> skills = project.getSkills();
+        skills.add(skill);
+        project.setSkills(skills);
+
+        return projectRepository.save(project);
+    }
+
+    public Project addParticipant(Long projectId, Long participantId){
+        Project project = projectRepository.findById(projectId).orElse(null);
+        User participant = userService.getUserById(participantId);
+
+        if (project == null || participant == null) {
+            return null;
+        }
+
+        List<User> participants = project.getParticipants();
+        participants.add(participant);
+        project.setParticipants(participants);
+        project.setParticipantsNumber(participants.size());
+
+        return projectRepository.save(project);
+    }
+
+    @Transactional
     public Project updateProject(Long id, Project project){
         Project existingProject = projectRepository.findById(id).orElse(null);
 
@@ -87,6 +121,22 @@ public class ProjectService {
         projectRepository.save(project);
 
         return project;
+    }
+
+    @Transactional
+    public Project removeSkill(Long projectId, Long skillId){
+        Project project = projectRepository.findById(projectId).orElse(null);
+        Skill skill = skillService.getSkillById(skillId);
+
+        if (project == null || skill == null) {
+            return null;
+        }
+
+        List<Skill> skills = project.getSkills();
+        skills.remove(skill);
+        project.setSkills(skills);
+
+        return projectRepository.save(project);
     }
 
     public void deleteProject(Long id){

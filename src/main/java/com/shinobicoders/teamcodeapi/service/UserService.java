@@ -3,6 +3,7 @@ package com.shinobicoders.teamcodeapi.service;
 import com.shinobicoders.teamcodeapi.model.Skill;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User addSkill(Long userId, Long skillId) {
         User user = userRepository.findById(userId).orElse(null);
         Skill skill = skillService.getSkillById(skillId);
@@ -45,6 +47,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id).orElse(null);
 
@@ -65,6 +68,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User leaveProject(Long userId, Long projectId) {
         User user = userRepository.findById(userId).orElse(null);
 
@@ -77,6 +81,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User removeSkill(Long userId, Long skillId) {
         User user = userRepository.findById(userId).orElse(null);
 
@@ -93,3 +98,4 @@ public class UserService {
         userRepository.deleteById(id);
     }
 }
+

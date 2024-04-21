@@ -1,6 +1,7 @@
 package com.shinobicoders.teamcodeapi.service;
 
 import com.shinobicoders.teamcodeapi.repository.NotificationRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,15 @@ public class NotificationService {
         return notificationRepository.findNotificationByUserId(userId);
     }
 
-    public Notification createNotification(Notification notification) {
+    public void createNotification(Notification notification) {
 
         notification.setViewed(false);
         notification.setCreationDate(new Date());
 
-        return notificationRepository.save(notification);
+        notificationRepository.save(notification);
     }
 
+    @Transactional
     public Notification updateNotification(Long id, Notification notificationDetails) {
         Notification notification = notificationRepository.findById(id).orElse(null);
 

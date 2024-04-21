@@ -3,6 +3,7 @@ package com.shinobicoders.teamcodeapi.service;
 import com.shinobicoders.teamcodeapi.model.Request;
 import com.shinobicoders.teamcodeapi.repository.RequestRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class RequestService {
         return requestRepository.save(request);
     }
 
+    @Transactional
     public Request updateRequest(Long id, Request updatedRequest){
         Request request = requestRepository.findById(id).orElse(null);
         if (request == null)

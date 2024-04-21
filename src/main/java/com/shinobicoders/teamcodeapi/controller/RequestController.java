@@ -3,12 +3,13 @@ package com.shinobicoders.teamcodeapi.controller;
 import com.shinobicoders.teamcodeapi.model.*;
 import com.shinobicoders.teamcodeapi.service.AuthService;
 import com.shinobicoders.teamcodeapi.service.NotificationService;
+import com.shinobicoders.teamcodeapi.service.ProjectService;
 import com.shinobicoders.teamcodeapi.service.RequestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.shinobicoders.teamcodeapi.model.RequestStatus;
 
 import java.util.Date;
 
@@ -19,6 +20,7 @@ public class RequestController {
     private final AuthService authService;
     private final RequestService requestService;
     private final NotificationService notificationService;
+    private final ProjectService projectService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Request> getRequest(@PathVariable Long id){
@@ -86,6 +88,16 @@ public class RequestController {
 
         if(updatedRequest == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Add user to project if request is approved
+        if (updatedRequest.getStatus() == RequestStatus.APPROVED) {
+            Project project = updatedRequest.getProject();
+            Project updatedProject = projectService.addParticipant(project.getId(), updatedRequest.getUser().getId());
+
+            if (updatedProject == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
 
         // Create notification for user who made the request if the status has changed

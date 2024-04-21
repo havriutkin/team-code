@@ -100,6 +100,21 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.createProject(project), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{projectId}/skill/{skillId}")
+    public ResponseEntity<Project> addSkill(@PathVariable Long projectId, @PathVariable Long skillId){
+        if(!authService.authorizeProjectOwner(projectId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Project project = projectService.addSkill(projectId, skillId);
+
+        if (project == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails){
         if(!authService.authorizeProjectOwner(id)) {
@@ -132,6 +147,21 @@ public class ProjectController {
         }
 
         Project project = projectService.removeParticipant(projectId, participantId);
+
+        if (project == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{projectId}/skill/{skillId}")
+    public ResponseEntity<Project> removeSkill(@PathVariable Long projectId, @PathVariable Long skillId){
+        if(!authService.authorizeProjectOwner(projectId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Project project = projectService.removeSkill(projectId, skillId);
 
         if (project == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
