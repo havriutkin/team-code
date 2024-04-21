@@ -71,7 +71,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}/project/{projectId}")
-    public ResponseEntity<?> leaveProject(@PathVariable Long userId, @PathVariable Long projectId) {
+    public ResponseEntity<User> leaveProject(@PathVariable Long userId, @PathVariable Long projectId) {
         if (!authService.authorizeUser(userId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
