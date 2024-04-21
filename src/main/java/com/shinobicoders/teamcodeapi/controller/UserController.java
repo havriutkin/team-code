@@ -70,4 +70,19 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/{userId}/project/{projectId}")
+    public ResponseEntity<?> leaveProject(@PathVariable Long userId, @PathVariable Long projectId) {
+        if (!authService.authorizeUser(userId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = userService.leaveProject(userId, projectId);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
 }

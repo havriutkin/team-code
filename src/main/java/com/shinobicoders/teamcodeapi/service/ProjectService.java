@@ -1,11 +1,9 @@
 package com.shinobicoders.teamcodeapi.service;
 
-import com.shinobicoders.teamcodeapi.model.Project;
-import com.shinobicoders.teamcodeapi.model.ProjectFilter;
-import com.shinobicoders.teamcodeapi.model.ProjectLevel;
-import com.shinobicoders.teamcodeapi.model.Skill;
+import com.shinobicoders.teamcodeapi.model.*;
 import com.shinobicoders.teamcodeapi.repository.ProjectRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,7 +73,24 @@ public class ProjectService {
         return filteredProjects;
     }
 
+    @Transactional
+    public Project removeParticipant(Long projectId, Long participantId) {
+        Project project = projectRepository.findById(projectId).orElse(null);
+
+        if (project == null) {
+            return null;
+        }
+
+        List<User> participants = project.getParticipants();
+        participants.removeIf(user -> user.getId().equals(participantId));
+        project.setParticipants(participants);
+        projectRepository.save(project);
+
+        return project;
+    }
+
     public void deleteProject(Long id){
         projectRepository.deleteById(id);
     }
+
 }

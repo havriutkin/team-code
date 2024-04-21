@@ -124,4 +124,19 @@ public class ProjectController {
         projectService.deleteProject(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/{projectId}/participant/{participantId}")
+    public ResponseEntity<Project> removeParticipant(@PathVariable Long projectId, @PathVariable Long participantId){
+        if(!authService.authorizeProjectOwner(projectId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Project project = projectService.removeParticipant(projectId, participantId);
+
+        if (project == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
 }

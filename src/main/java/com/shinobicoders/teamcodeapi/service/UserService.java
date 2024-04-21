@@ -50,6 +50,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User leaveProject(Long userId, Long projectId) {
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null) {
+            return null;
+        }
+
+        user.getParticipatingProjects().removeIf(project -> project.getId().equals(projectId));
+
+        return userRepository.save(user);
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
