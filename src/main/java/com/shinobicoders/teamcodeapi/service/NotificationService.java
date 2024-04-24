@@ -42,7 +42,6 @@ public class NotificationService {
         if (notification == null)
             return null;
 
-        notification.setMessage(notificationDetails.getMessage());
         notification.setViewed(notificationDetails.isViewed());
 
         return notificationRepository.save(notification);
