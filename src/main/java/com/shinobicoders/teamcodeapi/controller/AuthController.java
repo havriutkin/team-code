@@ -2,6 +2,7 @@ package com.shinobicoders.teamcodeapi.controller;
 
 import com.shinobicoders.teamcodeapi.auth.LoginRequest;
 import com.shinobicoders.teamcodeapi.auth.LoginResponse;
+import com.shinobicoders.teamcodeapi.auth.RegisterRequest;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public LoginResponse register(@RequestBody User user) {
+    public LoginResponse register(@RequestBody RegisterRequest request) {
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+
         return authService.register(user);
     }
 }
