@@ -57,10 +57,7 @@ public class UserService {
 
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
-
-        // todo: encrypt password
-        //user.setPassword(userDetails.getPassword());
-
+        user.setPassword(userDetails.getPassword());
         user.setBio(userDetails.getBio());
         user.setGithubLink(userDetails.getGithubLink());
         user.setExperience(userDetails.getExperience());
