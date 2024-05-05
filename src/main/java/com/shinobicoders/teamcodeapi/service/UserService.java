@@ -57,7 +57,7 @@ public class UserService {
 
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
+        user.setPassword(user.getPassword());
         user.setBio(userDetails.getBio());
         user.setGithubLink(userDetails.getGithubLink());
         user.setExperience(userDetails.getExperience());
