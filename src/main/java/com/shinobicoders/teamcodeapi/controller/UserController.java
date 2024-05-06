@@ -101,19 +101,6 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        // todo: check auth
-        // todo: test what happens if user does not exist
-
-        if(! authService.authorizeUser(id)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @DeleteMapping("/{userId}/project/{projectId}")
     public ResponseEntity<User> leaveProject(@PathVariable Long userId, @PathVariable Long projectId) {
         if (!authService.authorizeUser(userId)) {
@@ -160,5 +147,18 @@ public class UserController {
         }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        // todo: check auth
+        // todo: test what happens if user does not exist
+
+        if(! authService.authorizeUser(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
