@@ -67,6 +67,24 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PostMapping("/{id}/skills")
+    public ResponseEntity<User> addSkills(@PathVariable Long id, @RequestBody List<Long> skillIds) {
+        if (!authService.authorizeUser(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = null;
+        for (Long skillId : skillIds) {
+            user = userService.addSkill(id, skillId);
+        }
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
 
@@ -118,6 +136,24 @@ public class UserController {
         }
 
         User user = userService.removeSkill(userId, skillId);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}/skills")
+    public ResponseEntity<User> removeSkills(@PathVariable Long userId, @RequestBody List<Long> skillIds) {
+        if (!authService.authorizeUser(userId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = null;
+        for (Long skillId : skillIds) {
+            user = userService.removeSkill(userId, skillId);
+        }
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
