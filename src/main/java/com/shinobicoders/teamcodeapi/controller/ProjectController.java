@@ -57,10 +57,6 @@ public class ProjectController {
 
     @GetMapping("/member/{memberId}")
     public ResponseEntity<List<Project>> getProjectsByMemberId(@PathVariable Long memberId){
-        if(!authService.authorizeProjectMember(memberId)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
         User user = userService.getUserById(memberId);
         List<Project> projects = user.getParticipatingProjects();
 
