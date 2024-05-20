@@ -149,9 +149,6 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        // todo: check auth
-        // todo: test what happens if user does not exist
-
         if(! authService.authorizeUser(id)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
