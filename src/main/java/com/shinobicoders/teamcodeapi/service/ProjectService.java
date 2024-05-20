@@ -2,16 +2,12 @@ package com.shinobicoders.teamcodeapi.service;
 
 import com.shinobicoders.teamcodeapi.model.*;
 import com.shinobicoders.teamcodeapi.repository.ProjectRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Service

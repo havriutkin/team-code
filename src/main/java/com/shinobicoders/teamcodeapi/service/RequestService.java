@@ -2,19 +2,16 @@ package com.shinobicoders.teamcodeapi.service;
 
 import com.shinobicoders.teamcodeapi.model.Request;
 import com.shinobicoders.teamcodeapi.repository.RequestRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RequestService {
-
-    @Autowired
-    private RequestRepository requestRepository;
+    private final RequestRepository requestRepository;
 
     public List<Request> getAllRequests(){
         return (List<Request>) requestRepository.findAll();
