@@ -2,7 +2,6 @@ package com.shinobicoders.teamcodeapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import com.shinobicoders.teamcodeapi.model.Request;
 import lombok.Getter;
 import lombok.Setter;
 
