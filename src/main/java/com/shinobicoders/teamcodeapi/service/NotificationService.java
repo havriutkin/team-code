@@ -2,7 +2,7 @@ package com.shinobicoders.teamcodeapi.service;
 
 import com.shinobicoders.teamcodeapi.repository.NotificationRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.shinobicoders.teamcodeapi.model.Notification;
@@ -11,9 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
-    @Autowired
-    private NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
 
     public List<Notification> getAllNotifications() {
         return (List<Notification>) notificationRepository.findAll();

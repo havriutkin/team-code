@@ -1,6 +1,5 @@
 package com.shinobicoders.teamcodeapi.controller;
 
-import com.shinobicoders.teamcodeapi.auth.UserPrincipal;
 import com.shinobicoders.teamcodeapi.model.Project;
 import com.shinobicoders.teamcodeapi.model.ProjectFilter;
 import com.shinobicoders.teamcodeapi.model.User;
