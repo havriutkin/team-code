@@ -38,7 +38,6 @@ public class AuthController {
 
     @GetMapping("/user")
     public UserPrincipal getUser() {
-        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return principal;
+        return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
