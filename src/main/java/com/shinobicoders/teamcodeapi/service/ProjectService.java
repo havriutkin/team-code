@@ -29,6 +29,30 @@ public class ProjectService {
         return projectRepository.findById(id).orElse(null);
     }
 
+    public List<Project> getProjectsByFilter (ProjectFilter projectFilter){
+        String projectName = projectFilter.getName();
+        ProjectLevel projectLevel = projectFilter.getProjectLevel();
+        List<String> skillNames = projectFilter.getSkills() == null ?
+                new ArrayList<>() :
+                projectFilter.getSkills();
+
+        List<Project> filteredProjects = new ArrayList<>(projectRepository.findAll());
+
+        if (projectName != null) {
+            filteredProjects.retainAll(projectRepository.findAllByNameContainingIgnoreCase(projectName));
+        }
+
+        if (projectLevel != null) {
+            filteredProjects.retainAll(projectRepository.findAllByProjectLevel(projectLevel));
+        }
+
+        if (!skillNames.isEmpty()) {
+            filteredProjects.retainAll(projectRepository.findAllProjectsBySkills(skillNames, skillNames.size()));
+        }
+
+        return filteredProjects;
+    }
+
     public Project createProject(Project project){
         return projectRepository.save(project);
     }
@@ -81,30 +105,6 @@ public class ProjectService {
         existingProject.setProjectLevel(project.getProjectLevel());
 
         return projectRepository.save(existingProject);
-    }
-
-    public List<Project> getProjectsByFilter (ProjectFilter projectFilter){
-        String projectName = projectFilter.getName();
-        ProjectLevel projectLevel = projectFilter.getProjectLevel();
-        List<String> skillNames = projectFilter.getSkills() == null ?
-                new ArrayList<>() :
-                projectFilter.getSkills();
-
-        List<Project> filteredProjects = new ArrayList<>(projectRepository.findAll());
-
-        if (projectName != null) {
-            filteredProjects.retainAll(projectRepository.findAllByNameContainingIgnoreCase(projectName));
-        }
-
-        if (projectLevel != null) {
-            filteredProjects.retainAll(projectRepository.findAllByProjectLevel(projectLevel));
-        }
-
-        if (!skillNames.isEmpty()) {
-            filteredProjects.retainAll(projectRepository.findAllProjectsBySkills(skillNames, skillNames.size()));
-        }
-
-        return filteredProjects;
     }
 
     @Transactional

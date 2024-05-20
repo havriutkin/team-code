@@ -45,6 +45,8 @@ public class RequestService {
         request.setStatus(updatedRequest.getStatus());
         request.setMessage(updatedRequest.getMessage());
 
+        requestRepository.save(request);
+
         return request;
     }
 

@@ -41,6 +41,17 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @PostMapping("/{id}/skill/{skillId}")
     public ResponseEntity<User> addSkill(@PathVariable Long id, @PathVariable Long skillId) {
         if (!authService.authorizeUser(id)) {
@@ -48,6 +59,24 @@ public class UserController {
         }
 
         User user = userService.addSkill(id, skillId);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/skills")
+    public ResponseEntity<User> addSkills(@PathVariable Long id, @RequestBody List<Long> skillIds) {
+        if (!authService.authorizeUser(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = null;
+        for (Long skillId : skillIds) {
+            user = userService.addSkill(id, skillId);
+        }
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -70,19 +99,6 @@ public class UserController {
         }
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        // todo: check auth
-        // todo: test what happens if user does not exist
-
-        if(! authService.authorizeUser(id)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}/project/{projectId}")
@@ -113,5 +129,36 @@ public class UserController {
         }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}/skills")
+    public ResponseEntity<User> removeSkills(@PathVariable Long userId, @RequestBody List<Long> skillIds) {
+        if (!authService.authorizeUser(userId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = null;
+        for (Long skillId : skillIds) {
+            user = userService.removeSkill(userId, skillId);
+        }
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        // todo: check auth
+        // todo: test what happens if user does not exist
+
+        if(! authService.authorizeUser(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

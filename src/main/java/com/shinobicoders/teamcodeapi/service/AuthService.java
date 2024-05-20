@@ -25,6 +25,15 @@ public class AuthService {
     public LoginResponse login(String email, String password) {
         User user = userService.getUserByEmail(email);
 
+        if (user == null) {
+            return null;
+        }
+
+        var encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(password, user.getPassword())) {
+            return null;
+        }
+
         String token = jwtUtils.issueToken(
                 String.valueOf(user.getId()),
                 user.getEmail(),
