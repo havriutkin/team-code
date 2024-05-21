@@ -60,9 +60,14 @@ public class AuthService {
     public boolean authorizeProjectMember(Long projectId) {
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Project project = projectService.getProjectById(projectId);
-        return project.getOwner().getId().equals(principal.getUserId()) ||
-                project.getParticipants().stream()
+        return project.getParticipants().stream()
                         .anyMatch(user -> user.getId().equals(principal.getUserId()));
+    }
+
+    public boolean authorizeProjectMember(Long projectId, Long userId) {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // Check if principal is the member and userId equals principal's userId
+        return authorizeProjectMember(projectId) && principal.getUserId().equals(userId);
     }
 
     public boolean authorizeRequestUser(Long requestId) {

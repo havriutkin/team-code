@@ -133,7 +133,7 @@ public class ProjectController {
 
     @DeleteMapping("/{projectId}/participant/{participantId}")
     public ResponseEntity<Project> removeParticipant(@PathVariable Long projectId, @PathVariable Long participantId){
-        if(!authService.authorizeProjectOwner(projectId)) {
+        if(!authService.authorizeProjectOwner(projectId) && !authService.authorizeProjectMember(projectId, participantId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
