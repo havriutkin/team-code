@@ -68,10 +68,6 @@ public class ProjectController {
 
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<Project>> getProjectsByOwnerId(@PathVariable Long ownerId){
-        if(!authService.authorizeProjectOwner(ownerId)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
         User user = userService.getUserById(ownerId);
         List<Project> projects = user.getOwnedProjects();
 
