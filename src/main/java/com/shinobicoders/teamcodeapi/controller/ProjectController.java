@@ -175,9 +175,13 @@ public class ProjectController {
             project = projectService.removeParticipant(projectId, participantId);
         }
 
+
         if (project == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        project.setParticipantsNumber(project.getParticipantsNumber() - participantIds.size());
+        projectService.updateProject(project.getId(), project);
 
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
