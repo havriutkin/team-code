@@ -161,6 +161,9 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        project.setParticipantsNumber(project.getParticipantsNumber() - 1);
+        projectService.updateProject(project.getId(), project);
+
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
