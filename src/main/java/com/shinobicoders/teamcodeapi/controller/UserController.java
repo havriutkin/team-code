@@ -1,7 +1,9 @@
 package com.shinobicoders.teamcodeapi.controller;
 
+import com.shinobicoders.teamcodeapi.model.Project;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.service.AuthService;
+import com.shinobicoders.teamcodeapi.service.ProjectService;
 import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final AuthService authService;
+    private final ProjectService projectService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -48,6 +51,22 @@ public class UserController {
         }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<User>> getUsersByProjectId(@PathVariable Long projectId) {
+        if (!authService.authorizeProjectOwner(projectId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Project project = projectService.getProjectById(projectId);
+        List<User> users = project.getParticipants();
+
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping("/{id}/skill/{skillId}")

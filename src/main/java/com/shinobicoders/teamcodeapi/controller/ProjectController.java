@@ -164,6 +164,24 @@ public class ProjectController {
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{projectId}/participants")
+    public ResponseEntity<Project> removeParticipants(@PathVariable Long projectId, @RequestBody List<Long> participantIds){
+        if(!authService.authorizeProjectOwner(projectId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        Project project = null;
+        for (Long participantId : participantIds) {
+            project = projectService.removeParticipant(projectId, participantId);
+        }
+
+        if (project == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{projectId}/skill/{skillId}")
     public ResponseEntity<Project> removeSkill(@PathVariable Long projectId, @PathVariable Long skillId){
         if(!authService.authorizeProjectOwner(projectId)) {
