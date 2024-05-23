@@ -2,6 +2,7 @@ package com.shinobicoders.teamcodeapi.controller;
 
 import com.shinobicoders.teamcodeapi.model.Project;
 import com.shinobicoders.teamcodeapi.model.ProjectFilter;
+import com.shinobicoders.teamcodeapi.model.ProjectLevel;
 import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.service.AuthService;
 import com.shinobicoders.teamcodeapi.service.ProjectService;
@@ -44,7 +45,15 @@ public class ProjectController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<Project>> getProjectsByFilter(@RequestBody ProjectFilter projectFilter){
+    public ResponseEntity<List<Project>> getProjectsByFilter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) ProjectLevel projectLevel,
+            @RequestParam(required = false) List<String> skills){
+        ProjectFilter projectFilter = new ProjectFilter();
+        projectFilter.setName(name);
+        projectFilter.setProjectLevel(projectLevel);
+        projectFilter.setSkills(skills);
+
         List<Project> projects = projectService.getProjectsByFilter(projectFilter);
 
         if (projects.isEmpty()) {
