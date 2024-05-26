@@ -120,4 +120,9 @@ public class RequestController {
         requestService.deleteRequest(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/isExists")
+    public ResponseEntity<?> isExists(@RequestParam Long projectId, @RequestParam Long userId){
+        return  new ResponseEntity<>(requestService.isRequestExist(projectId, userId), HttpStatus.OK);
+    }
 }

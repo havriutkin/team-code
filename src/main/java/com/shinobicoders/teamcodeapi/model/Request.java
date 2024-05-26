@@ -17,6 +17,7 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "status_id")
     private RequestStatus status;
 
     private Date requestDate;

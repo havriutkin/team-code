@@ -9,5 +9,7 @@ public interface RequestRepository extends CrudRepository<Request, Long> {
     List<Request> findAllByUserId(Long userId);
 
     List<Request> findAllByProjectId(Long projectId);
+
+    boolean existsByProjectIdAndUserId(Long projectId, Long userId);
 }
 

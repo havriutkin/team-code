@@ -50,4 +50,8 @@ public class RequestService {
     public void deleteRequest(Long id){
         requestRepository.deleteById(id);
     }
+
+    public boolean isRequestExist (Long projectId, Long userId){
+        return requestRepository.existsByProjectIdAndUserId(projectId, userId);
+    };
 }
