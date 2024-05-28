@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.shinobicoders.teamcodeapi.model.RequestStatus;
 
 import java.util.Date;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/request")
@@ -84,11 +85,15 @@ public class RequestController {
         }
 
         Request odlRequest = requestService.getRequestById(id);
+        String oldStatus = odlRequest.getStatus().toString();
+
         Request updatedRequest = requestService.updateRequest(id, request);
 
         if(updatedRequest == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        String newStatus = updatedRequest.getStatus().toString();
 
         // Add user to project if request is approved
         if (updatedRequest.getStatus() == RequestStatus.APPROVED) {
@@ -101,14 +106,14 @@ public class RequestController {
         }
 
         // Create notification for user who made the request if the status has changed
-        if (odlRequest.getStatus() != updatedRequest.getStatus()) {
+        if (!Objects.equals(oldStatus, newStatus)) {
             Notification notification = new Notification();
-            notification.setMessage("Request for project " + updatedRequest.getProject().getName() + " has been updated");
+            notification.setMessage("Request for project " + updatedRequest.getProject().getName() + " has been " + newStatus.toLowerCase() + ".");
             notification.setUser(updatedRequest.getUser());
             notificationService.createNotification(notification);
         }
 
-        return  new ResponseEntity<>(updatedRequest, HttpStatus.OK);
+        return new ResponseEntity<>(updatedRequest, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
