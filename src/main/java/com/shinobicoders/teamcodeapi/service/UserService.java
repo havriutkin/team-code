@@ -92,5 +92,9 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    public boolean isUserExistsByEmail(String email) { return userRepository.existsUserByEmail(email); }
+
+    public boolean isUserExistsByName(String username) { return userRepository.existsUserByName(username); }
 }
 

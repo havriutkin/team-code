@@ -47,8 +47,12 @@ public class AuthService {
         var password = user.getPassword();
         var encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(password));
-
-        userService.createUser(user);
+        try{
+            userService.createUser(user);
+        }
+        catch (Exception e){
+            return null;
+        }
         return login(user.getEmail(), password);
     }
 

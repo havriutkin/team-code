@@ -8,6 +8,8 @@ import com.shinobicoders.teamcodeapi.model.User;
 import com.shinobicoders.teamcodeapi.service.AuthService;
 import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,18 +24,27 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody @Validated LoginRequest request) {
-        return authService.login(request.getEmail(), request.getPassword());
+    public ResponseEntity<LoginResponse> login(@RequestBody @Validated LoginRequest request) {
+        LoginResponse loginResponse = authService.login(request.getEmail(), request.getPassword());
+        if (loginResponse == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>( loginResponse, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public LoginResponse register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request) {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
 
-        return authService.register(user);
+        LoginResponse loginResponse = authService.register(user);
+
+        if (loginResponse == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/user")

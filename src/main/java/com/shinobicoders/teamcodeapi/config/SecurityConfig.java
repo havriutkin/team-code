@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/public/**").permitAll()
                         .requestMatchers("/api/v1/auth/register").permitAll()
                         .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/user/exists/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
