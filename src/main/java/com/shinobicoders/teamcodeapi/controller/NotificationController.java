@@ -31,7 +31,6 @@ public class NotificationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Notification> updateNotification(@PathVariable Long id, @RequestBody Notification updatedNotification) {
-
         if(! authService.authorizeNotificationOwner(id)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

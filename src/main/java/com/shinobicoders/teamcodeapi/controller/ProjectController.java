@@ -1,10 +1,8 @@
 package com.shinobicoders.teamcodeapi.controller;
 
-import com.shinobicoders.teamcodeapi.model.Project;
-import com.shinobicoders.teamcodeapi.model.ProjectFilter;
-import com.shinobicoders.teamcodeapi.model.ProjectLevel;
-import com.shinobicoders.teamcodeapi.model.User;
+import com.shinobicoders.teamcodeapi.model.*;
 import com.shinobicoders.teamcodeapi.service.AuthService;
+import com.shinobicoders.teamcodeapi.service.NotificationService;
 import com.shinobicoders.teamcodeapi.service.ProjectService;
 import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import com.shinobicoders.teamcodeapi.model.Notification;
+
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +23,7 @@ public class ProjectController {
     private final AuthService authService;
     private final ProjectService projectService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     @GetMapping
     public ResponseEntity<List<Project>> getAllProjects(){
@@ -173,6 +174,15 @@ public class ProjectController {
         project.setParticipantsNumber(project.getParticipantsNumber() - 1);
         projectService.updateProject(project.getId(), project);
 
+        // Create notification for project owner
+        User owner = project.getOwner();
+        User participant = userService.getUserById(participantId);
+        Notification notification = new Notification();
+        notification.setMessage("User " + participant.getName() + " left project " + project.getName());
+        notification.setUser(owner);
+        notificationService.createNotification(notification);
+
+
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
@@ -194,6 +204,16 @@ public class ProjectController {
 
         project.setParticipantsNumber(project.getParticipantsNumber() - participantIds.size());
         projectService.updateProject(project.getId(), project);
+
+        // Create notifications for project owner
+        User owner = project.getOwner();
+        for (Long participantId : participantIds) {
+            User participant = userService.getUserById(participantId);
+            Notification notification = new Notification();
+            notification.setMessage("User " + participant.getName() + " left project " + project.getName());
+            notification.setUser(owner);
+            notificationService.createNotification(notification);
+        }
 
         return new ResponseEntity<>(project, HttpStatus.OK);
     }

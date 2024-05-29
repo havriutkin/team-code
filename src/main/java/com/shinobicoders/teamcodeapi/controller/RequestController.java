@@ -111,6 +111,11 @@ public class RequestController {
             notification.setMessage("Request for project " + updatedRequest.getProject().getName() + " has been " + newStatus.toLowerCase() + ".");
             notification.setUser(updatedRequest.getUser());
             notificationService.createNotification(notification);
+
+            // Delete request
+            if (updatedRequest.getStatus() == RequestStatus.APPROVED || updatedRequest.getStatus() == RequestStatus.REJECTED) {
+                requestService.deleteRequest(updatedRequest.getId());
+            }
         }
 
         return new ResponseEntity<>(updatedRequest, HttpStatus.OK);
