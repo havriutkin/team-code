@@ -91,7 +91,7 @@ public class ProjectController {
     public ResponseEntity<Project> createProject(@RequestBody Project project){
 
         project.setStartDate(new Date());
-        project.setParticipants(List.of(project.getOwner()));
+        project.setParticipants(List.of());
         project.setParticipantsNumber(1);
         project.setStatus(true);
 
