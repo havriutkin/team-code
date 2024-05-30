@@ -77,9 +77,10 @@ public class ProjectService {
         }
 
         List<User> participants = project.getParticipants();
+        int oldParticipantsNumber = project.getParticipantsNumber();
         participants.add(participant);
         project.setParticipants(participants);
-        project.setParticipantsNumber(participants.size());
+        project.setParticipantsNumber(oldParticipantsNumber + 1);
 
         return projectRepository.save(project);
     }

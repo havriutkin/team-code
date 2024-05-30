@@ -179,6 +179,12 @@ public class ProjectController {
         notification.setUser(owner);
         notificationService.createNotification(notification);
 
+        // Notification for participant
+        Notification notificationParticipant = new Notification();
+        notificationParticipant.setMessage("You are not part of " + project.getName() + " any more.");
+        notificationParticipant.setUser(participant);
+        notificationService.createNotification(notificationParticipant);
+
 
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
@@ -210,6 +216,12 @@ public class ProjectController {
             notification.setMessage("User " + participant.getName() + " left project " + project.getName());
             notification.setUser(owner);
             notificationService.createNotification(notification);
+
+            // Notification for participant
+            Notification notificationParticipant = new Notification();
+            notificationParticipant.setMessage("You are not part of " + project.getName() + " any more.");
+            notificationParticipant.setUser(participant);
+            notificationService.createNotification(notificationParticipant);
         }
 
         return new ResponseEntity<>(project, HttpStatus.OK);
