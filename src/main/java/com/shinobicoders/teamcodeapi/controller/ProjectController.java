@@ -8,7 +8,6 @@ import com.shinobicoders.teamcodeapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.shinobicoders.teamcodeapi.model.Notification;
 
@@ -89,12 +88,10 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<Project> createProject(Project project){
-        User owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<Project> createProject(@RequestBody Project project){
 
         project.setStartDate(new Date());
-        project.setOwner(owner);
-        project.setParticipants(List.of(owner));
+        project.setParticipants(List.of(project.getOwner()));
         project.setParticipantsNumber(1);
         project.setStatus(true);
 

@@ -69,6 +69,35 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/exists/email/{email}")
+    public ResponseEntity<Boolean> isUserExistsByEmail(@PathVariable String email) {
+        try {
+            boolean exists = userService.isUserExistsByEmail(email);
+            if (exists){
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else{
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/exists/name/{username}")
+    public ResponseEntity<Boolean> isUserExistsByName(@PathVariable String username) {
+        try {
+            boolean exists = userService.isUserExistsByName(username);
+            if (exists){
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else{
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/{id}/skill/{skillId}")
     public ResponseEntity<User> addSkill(@PathVariable Long id, @PathVariable Long skillId) {
         if (!authService.authorizeUser(id)) {
@@ -174,25 +203,5 @@ public class UserController {
 
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/exists/email/{email}")
-    public ResponseEntity<Boolean> isUserExistsByEmail(@PathVariable String email) {
-        try {
-            boolean exists = userService.isUserExistsByEmail(email);
-            return new ResponseEntity<>(exists, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/exists/name/{username}")
-    public ResponseEntity<Boolean> isUserExistsByName(@PathVariable String username) {
-        try {
-            boolean exists = userService.isUserExistsByName(username);
-            return new ResponseEntity<>(exists, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 }
